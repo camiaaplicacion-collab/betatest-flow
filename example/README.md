@@ -1,18 +1,15 @@
 # BetaTest Flow Example
 
-This app demonstrates how an external Flutter developer integrates `betatest_flow` with Firebase.
+## Que demuestra este ejemplo
 
-## What this example validates
+Este ejemplo demuestra una integracion publica real del SDK BetaTest Flow en una app Flutter minima:
 
-- `FirebaseBetaFeedbackRepository`
-- `BetaTestFlowConfig`
-- `BetaFeedbackButton` + `BetaFeedbackSheet`
-- Dynamic checklist from config
-- Persistent draft with SharedPreferences
-- Firestore submission using unique `reportKey` as `documentId`
-- Automatic technical data enrichment via `DeviceInfoService`
+- Inicializacion de Firebase con `Firebase.initializeApp()`.
+- Configuracion con `BetaTestFlowConfig`.
+- Repositorio `FirebaseBetaFeedbackRepository`.
+- Punto de entrada UI con `BetaFeedbackButton`.
 
-## Demo user/config used
+Datos demo usados:
 
 - `userId`: `demo_user_001`
 - `email`: `tester@example.com`
@@ -21,32 +18,40 @@ This app demonstrates how an external Flutter developer integrates `betatest_flo
 - `campaignId`: `demo_beta_1`
 - `campaignName`: `Demo Beta 1`
 - `reportVersion`: `1`
-- checklist ids: `login`, `home`, `profile`, `payments`, `notifications`, `design`
+- checklist: `login`, `home`, `feedback`
 
-## Firebase setup
+## Como ejecutarlo
 
-1. Create a Firebase project.
-2. Add Android/iOS/Web app entries as needed.
-3. Configure FlutterFire for this example folder.
+```bash
+cd example
+flutter pub get
+flutterfire configure
+flutter run
+```
+
+## Que necesita Firebase
+
+Antes de ejecutar:
+
+1. Crear o usar un proyecto Firebase.
+2. Configurar FlutterFire para la carpeta `example/`.
 
 ```bash
 cd example
 flutterfire configure
 ```
 
-4. Ensure `lib/main.dart` initializes Firebase.
-5. For Android/iOS, ensure platform Firebase files are generated and linked.
-6. Create Firestore database and allow writes for test users (dev rules only).
+3. Verificar que `Firebase.initializeApp()` pueda ejecutarse correctamente en `example/lib/main.dart`.
+4. Tener Firestore habilitado y permisos de escritura para la coleccion `beta_reports` segun las reglas del proyecto host.
 
-Suggested dev collection/document pattern used by SDK:
+## Que debe esperar el desarrollador
 
-- Collection: `beta_reports` (or `config.firebaseCollection`)
-- Document ID: `{campaignId}_{userId}`
+- Se muestra una pantalla simple con titulo `BetaTest Flow SDK Demo`.
+- Se muestra un texto corto que indica que es una demo de integracion.
+- Se puede abrir el modal de feedback desde `BetaFeedbackButton` y enviar reporte con los datos demo.
 
-## Run example
+## Que NO demuestra este ejemplo
 
-```bash
-cd example
-flutter pub get
-flutter run
-```
+- No demuestra autenticacion de usuarios.
+- No demuestra flujos avanzados de UI fuera del boton/modal de feedback.
+- No reemplaza las reglas de seguridad de Firestore del proyecto host.
