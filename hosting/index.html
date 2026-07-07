@@ -1,89 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.15.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.15.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.15.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
+    <meta name="description" content="BetaTest Flow: plataforma para gestion de pruebas beta cerradas.">
+    <title>BetaTest Flow | Closed Beta</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <header class="hero">
+      <div class="hero__gradient" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <p class="badge">Beta cerrada</p>
+        <h1>BetaTest Flow</h1>
+        <p class="lead">
+          Plataforma para organizar, seguir y documentar ciclos de pruebas beta cerradas con enfoque operativo y trazable.
+        </p>
+      </div>
+    </header>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+    <main>
+      <section id="que-es" class="section container card">
+        <h2>Que es BetaTest Flow</h2>
+        <p>
+          BetaTest Flow es un entorno de trabajo para equipos que ejecutan pruebas beta cerradas y necesitan claridad en cada etapa: desde la preparacion del flujo de pruebas hasta la revision final de resultados.
+        </p>
+      </section>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
+      <section id="alpha-congelada" class="section container card">
+        <h2>Alpha 0.2 congelada</h2>
+        <p>
+          La version Alpha 0.2 se encuentra congelada a nivel funcional y documental. El alcance aprobado se mantiene estable para asegurar coherencia, trazabilidad y validacion controlada del producto.
+        </p>
+      </section>
+
+      <section id="beta-cerrada" class="section container card">
+        <h2>Beta cerrada</h2>
+        <p>
+          Esta instancia esta orientada exclusivamente a participantes invitados. El objetivo es obtener retroalimentacion real en un entorno controlado antes de fases de expansion.
+        </p>
+      </section>
+
+      <section id="testers" class="section container card">
+        <h2>Informacion para testers</h2>
+        <ul>
+          <li>Acceso por invitacion y seguimiento de instrucciones oficiales del equipo.</li>
+          <li>Reporte de observaciones funcionales con contexto claro y reproducible.</li>
+          <li>Participacion enfocada en calidad, estabilidad y experiencia de uso.</li>
+        </ul>
+      </section>
+
+      <section id="sdk" class="section container card">
+        <h2>SDK</h2>
+        <p>
+          El SDK se utiliza para capturar informacion de ejecucion definida para la beta cerrada. Su uso y configuracion permanecen bajo control del equipo de desarrollo segun el alcance validado.
+        </p>
+      </section>
+
+      <section id="privacidad" class="section container card">
+        <h2>Privacidad</h2>
+        <p>
+          La informacion recopilada durante la beta cerrada se trata con criterio de minimizacion y uso interno de evaluacion. Solo se utiliza para mejorar calidad y funcionamiento del producto.
+        </p>
+      </section>
+
+      <section id="terminos" class="section container card">
+        <h2>Terminos y condiciones</h2>
+        <p>
+          La participacion en esta beta implica aceptar el uso del entorno en fase de validacion, con posibles ajustes operativos y disponibilidad sujeta a mantenimiento.
+        </p>
+      </section>
+
+      <section id="contacto" class="section container card">
+        <h2>Contacto</h2>
+        <p>
+          Para soporte o consultas relacionadas con la beta cerrada, contactar al equipo responsable de BetaTest Flow por los canales internos definidos para participantes invitados.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>Version: Alpha 0.2 / Closed Beta Preparation</p>
+      </div>
+    </footer>
   </body>
 </html>
