@@ -1,0 +1,24 @@
+name: betatest_flow_example
+description: Example app for betatest_flow SDK integration.
+publish_to: none
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^3.15.2
+  cloud_firestore: ^5.6.12
+  betatest_flow:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
