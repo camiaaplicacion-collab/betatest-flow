@@ -24,11 +24,14 @@
       <div class="container hero__content">
         <div class="hero__top">
           <p class="badge">v0.1.0 / DX Web</p>
-          <nav class="language-switch" aria-label="Language selector">
-            <button class="language-switch__button" type="button" data-lang="en" aria-pressed="true">English</button>
-            <span class="language-switch__separator" aria-hidden="true">|</span>
-            <button class="language-switch__button" type="button" data-lang="es" aria-pressed="false">Español</button>
-          </nav>
+          <div class="hero__controls">
+            <a class="top-link" href="#documentation" data-i18n="nav.documentation">Documentation</a>
+            <nav class="language-switch" aria-label="Language selector">
+              <button class="language-switch__button" type="button" data-lang="en" aria-pressed="true">English</button>
+              <span class="language-switch__separator" aria-hidden="true">|</span>
+              <button class="language-switch__button" type="button" data-lang="es" aria-pressed="false">Español</button>
+            </nav>
+          </div>
         </div>
         <h1 class="brand-wordmark"><span class="brand-betatest">BetaTest</span> <span class="brand-flow">Flow</span></h1>
         <p class="hero-subtitle" data-i18n="hero.subtitle">Flutter Beta Testing SDK</p>
@@ -37,6 +40,7 @@
         <div class="hero__actions">
           <a class="btn btn--primary" href="#instalacion" data-i18n="hero.ctaStart">Get Started</a>
           <a class="btn btn--ghost" href="#informe" data-i18n="hero.ctaDemo">View Demo Report</a>
+          <button class="btn btn--ghost share-btn" type="button" data-share-trigger data-i18n="share.hero">Share</button>
         </div>
       </div>
     </header>
@@ -135,6 +139,369 @@ flutter pub get</code></pre>
   --out-dir exports/demo</code></pre>
       </section>
 
+      <section id="documentation" class="section container card">
+        <h2 data-i18n="documentation.title">Documentation</h2>
+        <p data-i18n="documentation.intro">Build your integration path step by step. Start fast, then go deeper into export and analysis workflows.</p>
+        <div class="docs-grid">
+          <article class="doc-card">
+            <h3 data-i18n="documentation.gettingStarted.title">Getting Started</h3>
+            <p class="doc-card__description" data-i18n="documentation.gettingStarted.description">Understand the core flow and minimum setup to start collecting beta feedback.</p>
+            <p class="doc-card__meta"><span data-i18n="documentation.estimatedTime">Estimated time</span>: <strong data-i18n="documentation.gettingStarted.time">5 min</strong></p>
+            <p class="doc-card__meta"><span data-i18n="documentation.level">Level</span>: <strong data-i18n="documentation.gettingStarted.level">Beginner</strong></p>
+            <a class="doc-card__button doc-card__button--link" href="#getting-started" data-i18n="documentation.readGuide">Read guide</a>
+          </article>
+
+          <article class="doc-card">
+            <h3 data-i18n="documentation.installation.title">Installation</h3>
+            <p class="doc-card__description" data-i18n="documentation.installation.description">Set dependency, run package sync, and prepare your host app environment.</p>
+            <p class="doc-card__meta"><span data-i18n="documentation.estimatedTime">Estimated time</span>: <strong data-i18n="documentation.installation.time">8 min</strong></p>
+            <p class="doc-card__meta"><span data-i18n="documentation.level">Level</span>: <strong data-i18n="documentation.installation.level">Beginner</strong></p>
+            <a class="doc-card__button doc-card__button--link" href="#installation" data-i18n="documentation.readGuide">Read guide</a>
+          </article>
+
+          <article class="doc-card">
+            <h3 data-i18n="documentation.firstReport.title">First Beta Report</h3>
+            <p class="doc-card__description" data-i18n="documentation.firstReport.description">Create your first complete report and validate the end-to-end capture flow.</p>
+            <p class="doc-card__meta"><span data-i18n="documentation.estimatedTime">Estimated time</span>: <strong data-i18n="documentation.firstReport.time">10 min</strong></p>
+            <p class="doc-card__meta"><span data-i18n="documentation.level">Level</span>: <strong data-i18n="documentation.firstReport.level">Beginner</strong></p>
+            <a class="doc-card__button doc-card__button--link" href="#first-report" data-i18n="documentation.readGuide">Read guide</a>
+          </article>
+
+          <article class="doc-card">
+            <h3 data-i18n="documentation.exportReports.title">Export Reports</h3>
+            <p class="doc-card__description" data-i18n="documentation.exportReports.description">Generate JSON, CSV and markdown outputs from Firestore or offline fixtures.</p>
+            <p class="doc-card__meta"><span data-i18n="documentation.estimatedTime">Estimated time</span>: <strong data-i18n="documentation.exportReports.time">5 min</strong></p>
+            <p class="doc-card__meta"><span data-i18n="documentation.level">Level</span>: <strong data-i18n="documentation.exportReports.level">Intermediate</strong></p>
+            <a class="doc-card__button doc-card__button--link" href="#export-reports" data-i18n="documentation.readGuide">Read guide</a>
+          </article>
+
+          <article class="doc-card">
+            <h3 data-i18n="documentation.analysisEngine.title">Analysis Engine</h3>
+            <p class="doc-card__description" data-i18n="documentation.analysisEngine.description">Interpret release decision, confidence score, and 48h action priorities.</p>
+            <p class="doc-card__meta"><span data-i18n="documentation.estimatedTime">Estimated time</span>: <strong data-i18n="documentation.analysisEngine.time">15 min</strong></p>
+            <p class="doc-card__meta"><span data-i18n="documentation.level">Level</span>: <strong data-i18n="documentation.analysisEngine.level">Intermediate</strong></p>
+            <a class="doc-card__button doc-card__button--link" href="#analysis-engine" data-i18n="documentation.readGuide">Read guide</a>
+          </article>
+
+          <article class="doc-card">
+            <h3 data-i18n="documentation.faq.title">FAQ</h3>
+            <p class="doc-card__description" data-i18n="documentation.faq.description">Resolve common integration and troubleshooting questions quickly.</p>
+            <p class="doc-card__meta"><span data-i18n="documentation.estimatedTime">Estimated time</span>: <strong data-i18n="documentation.faq.time">7 min</strong></p>
+            <p class="doc-card__meta"><span data-i18n="documentation.level">Level</span>: <strong data-i18n="documentation.faq.level">Advanced</strong></p>
+            <a class="doc-card__button doc-card__button--link" href="#faq" data-i18n="documentation.readGuide">Read guide</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="getting-started" class="section container card">
+        <h2 data-i18n="gettingStarted.title">Getting Started</h2>
+        <div class="getting-started-meta">
+          <p class="doc-card__meta"><span data-i18n="gettingStarted.estimatedTimeLabel">Estimated time</span>: <strong data-i18n="gettingStarted.estimatedTimeValue">5 minutes</strong></p>
+          <p class="doc-card__meta"><span data-i18n="gettingStarted.levelLabel">Level</span>: <strong data-i18n="gettingStarted.levelValue">Beginner</strong></p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="gettingStarted.learnTitle">What you will learn</h3>
+          <p data-i18n="gettingStarted.learnBody">You will understand the minimum integration path, when to run exports, and how to use analysis outputs to ship with confidence.</p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="gettingStarted.whatIsTitle">What is BetaTest Flow</h3>
+          <p data-i18n="gettingStarted.whatIsBody">BetaTest Flow is a reusable Flutter SDK to capture structured beta feedback and convert it into actionable release guidance.</p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="gettingStarted.whenToUseTitle">When to use it</h3>
+          <p data-i18n="gettingStarted.whenToUseBody">Use it when your team needs a repeatable beta process, clear release criteria, and faster feedback-to-fix cycles.</p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="gettingStarted.flowTitle">Complete flow</h3>
+          <p class="gs-flow-line" data-i18n="gettingStarted.flowLine">Flutter App -> SDK Widget -> Firestore/JSON -> Analysis Engine -> Executive Report -> AI Correction Prompt</p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="gettingStarted.expectedTitle">Expected outcome</h3>
+          <p data-i18n="gettingStarted.expectedBody">At the end, you have one structured report pipeline and a clear action path for release decisions and corrections.</p>
+        </div>
+      </section>
+
+      <section id="installation" class="section container card">
+        <h2 data-i18n="installationGuide.title">Installation</h2>
+        <div class="getting-started-meta">
+          <p class="doc-card__meta"><span data-i18n="installationGuide.estimatedTimeLabel">Estimated time</span>: <strong data-i18n="installationGuide.estimatedTimeValue">5 minutes</strong></p>
+          <p class="doc-card__meta"><span data-i18n="installationGuide.levelLabel">Level</span>: <strong data-i18n="installationGuide.levelValue">Beginner</strong></p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="installationGuide.requirementsTitle">Requirements</h3>
+          <ul>
+            <li data-i18n="installationGuide.req1">Flutter >= 3.35.0</li>
+            <li data-i18n="installationGuide.req2">Firebase project if using Firestore mode</li>
+            <li data-i18n="installationGuide.req3">Offline JSON mode available without Firebase</li>
+          </ul>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="installationGuide.dependencyTitle">Install dependency</h3>
+          <pre><code>dependencies:
+  betatest_flow:
+    path: ../betatest_flow
+
+flutter pub get</code></pre>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="installationGuide.importTitle">Import SDK</h3>
+          <pre><code>import 'package:betatest_flow/betatest_flow.dart';</code></pre>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="installationGuide.firstButtonTitle">Add your first button</h3>
+          <pre><code>final config = BetaTestFlowConfig(
+  appId: 'demo_app',
+  appName: 'Demo App',
+  campaignId: 'beta_1',
+  campaignName: 'Beta 1',
+  reportVersion: '1',
+);
+
+BetaFeedbackButton(
+  config: config,
+  repository: FirebaseBetaFeedbackRepository(config: config),
+  userId: 'tester_001',
+)</code></pre>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="installationGuide.expectedTitle">Expected outcome</h3>
+          <p data-i18n="installationGuide.expectedBody">A feedback button is visible in your app and ready to capture beta reports.</p>
+        </div>
+      </section>
+
+      <section id="first-report" class="section container card">
+        <h2 data-i18n="firstReportGuide.title">First Beta Report</h2>
+        <div class="getting-started-meta">
+          <p class="doc-card__meta"><span data-i18n="firstReportGuide.estimatedTimeLabel">Estimated time</span>: <strong data-i18n="firstReportGuide.estimatedTimeValue">10 minutes</strong></p>
+          <p class="doc-card__meta"><span data-i18n="firstReportGuide.levelLabel">Level</span>: <strong data-i18n="firstReportGuide.levelValue">Beginner</strong></p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="firstReportGuide.flowTitle">Flow</h3>
+          <ol>
+            <li data-i18n="firstReportGuide.step1">Add BetaFeedbackButton</li>
+            <li data-i18n="firstReportGuide.step2">Tester sends feedback</li>
+            <li data-i18n="firstReportGuide.step3">Report is saved</li>
+            <li data-i18n="firstReportGuide.step4">Export reports</li>
+            <li data-i18n="firstReportGuide.step5">Generate Executive Report</li>
+          </ol>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="firstReportGuide.expectedTitle">Expected outcome</h3>
+          <p data-i18n="firstReportGuide.expectedBody">First structured beta report ready for analysis.</p>
+        </div>
+      </section>
+
+      <section id="export-reports" class="section container card">
+        <h2 data-i18n="exportReportsGuide.title">Export Reports</h2>
+        <div class="getting-started-meta">
+          <p class="doc-card__meta"><span data-i18n="exportReportsGuide.estimatedTimeLabel">Estimated time</span>: <strong data-i18n="exportReportsGuide.estimatedTimeValue">5 minutes</strong></p>
+          <p class="doc-card__meta"><span data-i18n="exportReportsGuide.levelLabel">Level</span>: <strong data-i18n="exportReportsGuide.levelValue">Intermediate</strong></p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="exportReportsGuide.modesTitle">Export modes</h3>
+          <ul>
+            <li data-i18n="exportReportsGuide.modeA">A) Firestore mode</li>
+            <li data-i18n="exportReportsGuide.modeB">B) Offline JSON mode</li>
+          </ul>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="exportReportsGuide.offlineCommandTitle">Offline command</h3>
+          <pre><code>dart run tools/export_beta_reports.dart --input-json example/data/sample_beta_reports.json --out-dir exports/demo</code></pre>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="exportReportsGuide.outputsTitle">Generated outputs</h3>
+          <ul>
+            <li><code>beta_reports.json</code></li>
+            <li><code>beta_reports.csv</code></li>
+            <li><code>beta_summary.md</code></li>
+          </ul>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="exportReportsGuide.expectedTitle">Expected outcome</h3>
+          <p data-i18n="exportReportsGuide.expectedBody">Executive Report generated locally without Firebase.</p>
+          <a class="guide-link" href="#get-ai-prompt" data-i18n="shared.getAiPromptCta">Get AI Fix Prompt</a>
+        </div>
+      </section>
+
+      <section id="analysis-engine" class="section container card">
+        <h2 data-i18n="analysisEngineGuide.title">Analysis Engine</h2>
+        <div class="getting-started-meta">
+          <p class="doc-card__meta"><span data-i18n="analysisEngineGuide.estimatedTimeLabel">Estimated time</span>: <strong data-i18n="analysisEngineGuide.estimatedTimeValue">5 minutes</strong></p>
+          <p class="doc-card__meta"><span data-i18n="analysisEngineGuide.levelLabel">Level</span>: <strong data-i18n="analysisEngineGuide.levelValue">Intermediate</strong></p>
+        </div>
+
+        <div class="gs-block">
+          <p data-i18n="analysisEngineGuide.intro">The engine automatically analyzes every beta report and generates actionable guidance for the development team.</p>
+        </div>
+
+        <div class="ae-grid">
+          <article class="metric-card">
+            <h3 data-i18n="analysisEngineGuide.decisionTitle">Release Decision</h3>
+            <p data-i18n="analysisEngineGuide.decisionBody">Automatically classifies release state as:</p>
+            <ul>
+              <li>GO</li>
+              <li>GO WITH CONDITIONS</li>
+              <li>NO-GO</li>
+            </ul>
+          </article>
+
+          <article class="metric-card">
+            <h3 data-i18n="analysisEngineGuide.scoreTitle">Beta Confidence Score</h3>
+            <p data-i18n="analysisEngineGuide.scoreBody">Generates the following score dimensions:</p>
+            <ul>
+              <li>Overall Score</li>
+              <li>Stability</li>
+              <li>Usability</li>
+              <li>Release Readiness</li>
+            </ul>
+          </article>
+
+          <article class="metric-card">
+            <h3 data-i18n="analysisEngineGuide.planTitle">Action Plan 48h</h3>
+            <p data-i18n="analysisEngineGuide.planBody">Automatically prioritizes P1, P2, and P3 with suggested actions and validation criteria.</p>
+          </article>
+
+          <article class="metric-card">
+            <h3 data-i18n="analysisEngineGuide.promptTitle">AI Correction Prompt</h3>
+            <p data-i18n="analysisEngineGuide.promptBody">Generates a ready-to-use prompt for:</p>
+            <ul>
+              <li>GitHub Copilot</li>
+              <li>ChatGPT</li>
+              <li>Cursor</li>
+              <li>Gemini</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="analysisEngineGuide.diagramTitle">Flow diagram</h3>
+          <p class="diagram-flow" data-i18n-html="analysisEngineGuide.diagramFlow">Reports<br>↓<br>Analysis Engine<br>↓<br>Executive Report<br>↓<br>AI Prompt<br>↓<br>Developer</p>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="analysisEngineGuide.expectedTitle">Expected outcome</h3>
+          <p data-i18n="analysisEngineGuide.expectedBody">The SDK automatically transforms beta feedback into actionable release decisions.</p>
+          <a class="guide-link" href="#get-ai-prompt" data-i18n="shared.getAiPromptCta">Get AI Fix Prompt</a>
+        </div>
+      </section>
+
+      <section id="get-ai-prompt" class="section container card">
+        <h2 data-i18n="aiPromptGuide.title">Get the AI Fix Prompt</h2>
+        <div class="getting-started-meta">
+          <p class="doc-card__meta"><span data-i18n="aiPromptGuide.estimatedTimeLabel">Estimated time</span>: <strong data-i18n="aiPromptGuide.estimatedTimeValue">2 minutes</strong></p>
+          <p class="doc-card__meta"><span data-i18n="aiPromptGuide.levelLabel">Level</span>: <strong data-i18n="aiPromptGuide.levelValue">Beginner</strong></p>
+        </div>
+
+        <div class="gs-block">
+          <ol>
+            <li data-i18n="aiPromptGuide.step1">Run the export command.</li>
+            <li data-i18n="aiPromptGuide.step2">Open exports/demo/beta_summary.md.</li>
+            <li data-i18n="aiPromptGuide.step3">Find the "Prompt de Correccion" section.</li>
+            <li data-i18n="aiPromptGuide.step4">Copy it into Copilot, Cursor, ChatGPT or Gemini.</li>
+            <li data-i18n="aiPromptGuide.step5">Apply fixes by priority and run analyze/test.</li>
+          </ol>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="aiPromptGuide.commandTitle">Command</h3>
+          <pre><code>dart run tools/export_beta_reports.dart --input-json example/data/sample_beta_reports.json --out-dir exports/demo</code></pre>
+        </div>
+
+        <div class="gs-block">
+          <h3 data-i18n="aiPromptGuide.expectedTitle">Expected outcome</h3>
+          <p data-i18n="aiPromptGuide.expectedBody">You get a complete Executive Report and an AI-ready correction prompt.</p>
+        </div>
+      </section>
+
+      <section id="faq" class="section container card">
+        <h2 data-i18n="faqGuide.title">FAQ</h2>
+        <p data-i18n="faqGuide.intro">Answers to the most common questions when integrating BetaTest Flow.</p>
+
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" data-faq-question aria-expanded="false" aria-controls="faq-panel-1">
+                <span data-i18n="faqGuide.q1.question">Do I need Firebase?</span>
+              </button>
+            </h3>
+            <div class="faq-answer" id="faq-panel-1" hidden>
+              <div class="faq-answer__content" data-i18n-html="faqGuide.q1.answer">Firestore mode requires Firebase.<br>Offline JSON mode works without Firebase.</div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" data-faq-question aria-expanded="false" aria-controls="faq-panel-2">
+                <span data-i18n="faqGuide.q2.question">Can I use BetaTest Flow completely offline?</span>
+              </button>
+            </h3>
+            <div class="faq-answer" id="faq-panel-2" hidden>
+              <div class="faq-answer__content" data-i18n-html="faqGuide.q2.answer">Yes.<br>The SDK can export reports from JSON without connecting to Firestore.</div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" data-faq-question aria-expanded="false" aria-controls="faq-panel-3">
+                <span data-i18n="faqGuide.q3.question">What does BetaTest Flow generate?</span>
+              </button>
+            </h3>
+            <div class="faq-answer" id="faq-panel-3" hidden>
+              <div class="faq-answer__content" data-i18n-html="faqGuide.q3.answer">Executive Report<br>Release Decision<br>Beta Confidence Score<br>Action Plan 48h<br>AI Correction Prompt</div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" data-faq-question aria-expanded="false" aria-controls="faq-panel-4">
+                <span data-i18n="faqGuide.q4.question">How do I get the AI Correction Prompt?</span>
+              </button>
+            </h3>
+            <div class="faq-answer" id="faq-panel-4" hidden>
+              <div class="faq-answer__content" data-i18n-html="faqGuide.q4.answer">Run the export command,<br>open beta_summary.md,<br>copy the &quot;Prompt de Correccion&quot; section<br>and paste it into Copilot, ChatGPT, Cursor or Gemini.</div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" data-faq-question aria-expanded="false" aria-controls="faq-panel-5">
+                <span data-i18n="faqGuide.q5.question">Can I customize the feedback form?</span>
+              </button>
+            </h3>
+            <div class="faq-answer" id="faq-panel-5" hidden>
+              <div class="faq-answer__content" data-i18n-html="faqGuide.q5.answer">Yes.<br>Fields can be enabled or disabled through BetaTestFlowConfig.</div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" data-faq-question aria-expanded="false" aria-controls="faq-panel-6">
+                <span data-i18n="faqGuide.q6.question">How can I contact the BetaTest Flow team?</span>
+              </button>
+            </h3>
+            <div class="faq-answer" id="faq-panel-6" hidden>
+              <div class="faq-answer__content" data-i18n="faqGuide.q6.answer">camiaaplicacion@gmail.com</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section id="sdk-status" class="section container card">
         <h2 data-i18n="status.title">SDK Status</h2>
         <div class="status-grid">
@@ -162,13 +529,17 @@ flutter pub get</code></pre>
       <section id="cta" class="section container card cta-card">
         <h2 data-i18n="cta.title">Ready to professionalize your beta workflow</h2>
         <p data-i18n="cta.body">Start with minimal setup and evolve into evidence-based release decisions.</p>
-        <a class="btn btn--primary" href="https://github.com" target="_blank" rel="noreferrer" data-i18n="cta.button">View on GitHub</a>
+        <div class="cta-actions">
+          <a class="btn btn--primary" href="https://github.com" target="_blank" rel="noreferrer" data-i18n="cta.button">View on GitHub</a>
+          <button class="btn btn--ghost share-btn" type="button" data-share-trigger data-i18n="share.cta">Share BetaTest Flow</button>
+        </div>
       </section>
     </main>
 
     <footer class="footer">
       <div class="container">
         <p data-i18n="footer.legal">BetaTest Flow SDK v0.1.0 | Legal: Privacy | Terms | License</p>
+        <p data-i18n="footer.contact">Official contact: camiaaplicacion@gmail.com</p>
       </div>
     </footer>
     <script src="i18n.js"></script>
