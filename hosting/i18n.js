@@ -13,6 +13,7 @@
         lead:
           'Capture structured beta feedback, export executive reports, and turn QA noise into clear release actions.',
         ctaStart: 'Get Started',
+        ctaTryDemo: 'Try the Demo',
         ctaDemo: 'View Demo Report',
       },
       nav: {
@@ -278,6 +279,207 @@
           answer: 'camiaaplicacion@gmail.com',
         },
       },
+      executiveReport: {
+        title: 'Executive Report Dashboard (Demo)',
+        intro:
+          'Live demo values generated from the official fixture sample_beta_reports.json.',
+        source: 'Source fixture: example/data/sample_beta_reports.json (3 reports)',
+        decision: {
+          title: 'Release Decision',
+          value: 'GO WITH CONDITIONS',
+          reason:
+            'Relevant risks remain; proceed only with mitigation and additional validation.',
+        },
+        score: {
+          title: 'Beta Confidence Score',
+          overall: '65/100 (Medium confidence)',
+          stability: 'Stability: 80/100',
+          usability: 'Usability: 80/100',
+          readiness: 'Release readiness: 78/100',
+        },
+        topIssues: {
+          title: 'Top Issues',
+          issue1:
+            '[tester_001] (high / failed) Publish button keeps loading and does not complete.',
+        },
+        actionPlan: {
+          title: 'Action Plan 48h',
+          p1: 'P1: Reduce high severity in main flow (PublishAlertScreen).',
+          p2: 'P2: Stabilize most reported screen with guided scenarios.',
+          p3:
+            'P3: Mitigate high usage impact with UX/error feedback improvements.',
+          p4: 'P4: Close release blockers with owners and ETA.',
+          p5: 'P5: Resolve highlighted UX ambiguity in publish flow state.',
+        },
+        aiPrompt: {
+          title: 'AI Correction Prompt (Preview)',
+          preview:
+            'Act as a senior engineer fixing a Flutter app using real beta feedback.\nDecision: GO WITH CONDITIONS\nBeta Confidence Score: 65/100\nPriority: P1 Publish flow high severity, then P2-P5 in 48h.',
+        },
+        metrics: {
+          title: 'Report Metrics',
+          intro:
+            'Simple visual breakdown based on the official demo fixture values.',
+          labels: {
+            critical: 'Critical',
+            high: 'High',
+            medium: 'Medium',
+            low: 'Low',
+            workedWell: 'Worked Well',
+            worked: 'Worked',
+            needsImprovements: 'Needs Improvements',
+            didntWork: "Didn't Work",
+            yes: 'Yes',
+            notYet: 'Not Yet',
+            no: 'No',
+          },
+          severity: {
+            title: 'Severity Distribution',
+            description: 'Distribution of severity reported by testers.',
+            total: 'Total analyzed: 3 reports',
+          },
+          result: {
+            title: 'Result Distribution',
+            description: 'How reports were classified by outcome.',
+            total: 'Total analyzed: 3 reports',
+          },
+          publish: {
+            title: 'Publish Recommendation',
+            description: 'Recommendation trends from beta testers.',
+            total: 'Total analyzed: 3 reports',
+          },
+          summary: {
+            title: 'Report Summary',
+            totalReportsLabel: 'Total reports:',
+            totalReportsValue: '3',
+            mostAffectedScreenLabel: 'Most affected screen:',
+            mostAffectedScreenValue: 'PublishAlertScreen',
+            highestSeverityLabel: 'Highest severity:',
+            highestSeverityValue: 'High',
+            releaseDecisionLabel: 'Release Decision:',
+            releaseDecisionValue: 'GO WITH CONDITIONS',
+            confidenceScoreLabel: 'Confidence Score:',
+            confidenceScoreValue: '65/100 (Medium confidence)',
+          },
+        },
+        timeline: {
+          title: 'Executive Timeline',
+          intro: 'Feedback -> Analysis -> Decision -> Action -> Prompt',
+          completed: 'Completed',
+          step1: {
+            title: 'Reports received',
+            description:
+              'Beta reports were captured and consolidated from the campaign.',
+          },
+          step2: {
+            title: 'Analysis completed',
+            description:
+              'The analysis engine processed severity, impact, and reproducibility.',
+          },
+          step3: {
+            title: 'Release Decision',
+            description:
+              'A release state was determined with conditions for mitigation.',
+          },
+          step4: {
+            title: 'Action Plan 48h',
+            description:
+              'Prioritized actions were prepared for the next 48 hours.',
+          },
+          step5: {
+            title: 'AI Prompt generated',
+            description:
+              'A correction prompt was generated to accelerate implementation fixes.',
+          },
+          loop:
+            'This is the complete BetaTest Flow loop: collect, analyze, decide and fix.',
+        },
+        actionPlanExpanded: {
+          title: 'Action Plan 48h',
+          intro: 'Prioritized fixes generated from tester feedback.',
+          microcopy:
+            'Start with P1. Do not refactor everything. Fix, validate, then move to the next priority.',
+          labels: {
+            reason: 'Reason:',
+            action: 'Suggested action:',
+            validation: 'Expected validation:',
+          },
+          p1: {
+            title: 'Reduce high severity in main flow',
+            reason:
+              'There is one high severity report affecting functional stability.',
+            action:
+              'Prioritize fixes in frequent routes and reinforce error/retry handling.',
+            validation:
+              'Run smoke suite on core flows and verify no regressions.',
+          },
+          p2: {
+            title: 'Stabilize most reported screen',
+            reason:
+              'PublishAlertScreen concentrates key reports and deserves early focus.',
+            action:
+              'Audit events, states and errors in PublishAlertScreen to reduce friction.',
+            validation:
+              'Run guided manual checks in PublishAlertScreen with at least 3 real scenarios.',
+          },
+          p3: {
+            title: 'Mitigate high usage impact',
+            reason:
+              'There is one report indicating strong impact on usage continuity.',
+            action:
+              'Resolve flow/UX blockers and improve visual feedback in high-risk operations.',
+            validation:
+              'Compare before/after with beta testers and confirm perceived flow improvement.',
+          },
+          p4: {
+            title: 'Close release decision gaps',
+            reason:
+              'There are release friction signals from tester recommendations.',
+            action:
+              'Convert non-release recommendations into a fix checklist with owners and ETA.',
+            validation:
+              'Re-run beta export and confirm reduction of negative recommendations.',
+          },
+          p5: {
+            title: 'Address highlighted UX observation',
+            reason:
+              'The flow does not clearly indicate whether send failed or is still in progress.',
+            action:
+              'Apply targeted UX adjustment and document criteria for future consistency.',
+            validation:
+              'Validate with a quick qualitative test that users understand the improved state.',
+          },
+        },
+        promptViewer: {
+          title: 'AI Prompt Viewer',
+          description:
+            'Review the correction prompt before copying it into your AI coding assistant.',
+          expand: 'Expand prompt',
+          collapse: 'Collapse prompt',
+          copy: 'Copy Prompt',
+          copied: 'Prompt copied',
+          promptText:
+            'Act as a senior engineer fixing a Flutter app using real beta feedback.\n\nRelease Decision: GO WITH CONDITIONS\nBeta Confidence Score: 65/100 (Medium confidence)\n\n48h Plan priorities:\n- P1: Reduce high severity in main flow.\n- P2: Stabilize most reported screen.\n- P3: Mitigate high usage impact.\n- P4: Close release decision gaps.\n- P5: Address highlighted UX observation.\n\nMandatory constraints:\n- Do not do a general refactor.\n- Fix by 48h priority order.\n- Keep backwards compatibility.\n- Run analyze and tests at the end.\n\nExpected response format:\n1. Modified files.\n2. Cause.\n3. Solution.\n4. Validation (including analyze/tests).',
+        },
+        downloadOutputs: {
+          title: 'Download Demo Outputs',
+          downloadButton: 'Download',
+          viewMarkdown: 'View Markdown',
+          json: {
+            title: 'JSON Report',
+            description: 'Structured beta report data.',
+          },
+          csv: {
+            title: 'CSV Report',
+            description: 'Spreadsheet-friendly report export.',
+          },
+          markdown: {
+            title: 'Markdown Summary',
+            description:
+              'Executive Report with decision, score, action plan and AI prompt.',
+          },
+        },
+      },
       status: {
         title: 'SDK Status',
         sdkVersion: 'SDK Version',
@@ -303,6 +505,7 @@
       cta: {
         title: 'Ready to professionalize your beta workflow',
         body: 'Start with minimal setup and evolve into evidence-based release decisions.',
+        tryDemo: 'Try the Demo',
         button: 'View on GitHub',
       },
       footer: {
@@ -320,6 +523,7 @@
         lead:
           'Captura feedback beta estructurado, exporta reportes ejecutivos y convierte el ruido de QA en acciones claras de release.',
         ctaStart: 'Comenzar',
+        ctaTryDemo: 'Probar la demo',
         ctaDemo: 'Ver Reporte Demo',
       },
       nav: {
@@ -586,6 +790,209 @@
           answer: 'camiaaplicacion@gmail.com',
         },
       },
+      executiveReport: {
+        title: 'Dashboard Executive Report (Demo)',
+        intro:
+          'Valores de demo generados desde el fixture oficial sample_beta_reports.json.',
+        source:
+          'Fixture fuente: example/data/sample_beta_reports.json (3 reportes)',
+        decision: {
+          title: 'Release Decision',
+          value: 'GO CON CONDICIONES',
+          reason:
+            'Existen riesgos relevantes; avanzar solo con mitigacion y validacion adicional.',
+        },
+        score: {
+          title: 'Beta Confidence Score',
+          overall: '65/100 (Confianza media)',
+          stability: 'Estabilidad: 80/100',
+          usability: 'Usabilidad: 80/100',
+          readiness: 'Release readiness: 78/100',
+        },
+        topIssues: {
+          title: 'Top Issues',
+          issue1:
+            '[tester_001] (alta / no_funciono) El boton de publicar se queda cargando y no completa la accion.',
+        },
+        actionPlan: {
+          title: 'Action Plan 48h',
+          p1: 'P1: Reducir severidad alta en flujo principal (PublishAlertScreen).',
+          p2: 'P2: Estabilizar pantalla mas reportada con escenarios guiados.',
+          p3:
+            'P3: Mitigar impacto fuerte de uso con mejoras UX/feedback de error.',
+          p4: 'P4: Cerrar bloqueadores de release con responsables y ETA.',
+          p5: 'P5: Resolver ambiguedad UX destacada en estado de publicacion.',
+        },
+        aiPrompt: {
+          title: 'AI Correction Prompt (Vista previa)',
+          preview:
+            'Actua como un ingeniero senior corrigiendo una app Flutter basada en feedback beta real.\nDecision: GO CON CONDICIONES\nBeta Confidence Score: 65/100\nPrioridad: P1 flujo de publicacion en severidad alta, luego P2-P5 en 48h.',
+        },
+        metrics: {
+          title: 'Metricas del Reporte',
+          intro:
+            'Desglose visual simple basado en los valores del fixture oficial de demo.',
+          labels: {
+            critical: 'Critica',
+            high: 'Alta',
+            medium: 'Media',
+            low: 'Baja',
+            workedWell: 'Funciono muy bien',
+            worked: 'Funciono',
+            needsImprovements: 'Necesita mejoras',
+            didntWork: 'No funciono',
+            yes: 'Si',
+            notYet: 'No todavia',
+            no: 'No',
+          },
+          severity: {
+            title: 'Distribucion por severidad',
+            description: 'Distribucion de severidad reportada por testers.',
+            total: 'Total analizado: 3 reportes',
+          },
+          result: {
+            title: 'Distribucion de resultados',
+            description: 'Como se clasificaron los reportes por resultado.',
+            total: 'Total analizado: 3 reportes',
+          },
+          publish: {
+            title: 'Recomendacion de publicacion',
+            description: 'Tendencia de recomendacion de los testers beta.',
+            total: 'Total analizado: 3 reportes',
+          },
+          summary: {
+            title: 'Resumen del reporte',
+            totalReportsLabel: 'Reportes totales:',
+            totalReportsValue: '3',
+            mostAffectedScreenLabel: 'Pantalla mas afectada:',
+            mostAffectedScreenValue: 'PublishAlertScreen',
+            highestSeverityLabel: 'Mayor severidad:',
+            highestSeverityValue: 'Alta',
+            releaseDecisionLabel: 'Release Decision:',
+            releaseDecisionValue: 'GO CON CONDICIONES',
+            confidenceScoreLabel: 'Confidence Score:',
+            confidenceScoreValue: '65/100 (Confianza media)',
+          },
+        },
+        timeline: {
+          title: 'Linea de tiempo ejecutiva',
+          intro: 'Feedback -> Analisis -> Decision -> Accion -> Prompt',
+          completed: 'Completado',
+          step1: {
+            title: 'Reportes recibidos',
+            description:
+              'Los reportes beta fueron capturados y consolidados desde la campana.',
+          },
+          step2: {
+            title: 'Analisis completado',
+            description:
+              'El motor de analisis proceso severidad, impacto y repetibilidad.',
+          },
+          step3: {
+            title: 'Decision de publicacion',
+            description:
+              'Se determino el estado de release con condiciones de mitigacion.',
+          },
+          step4: {
+            title: 'Plan de accion 48h',
+            description:
+              'Se definieron acciones priorizadas para las proximas 48 horas.',
+          },
+          step5: {
+            title: 'Prompt IA generado',
+            description:
+              'Se genero un prompt de correccion para acelerar la implementacion de fixes.',
+          },
+          loop:
+            'Este es el ciclo completo de BetaTest Flow: recopilar, analizar, decidir y corregir.',
+        },
+        actionPlanExpanded: {
+          title: 'Plan de accion 48h',
+          intro:
+            'Correcciones priorizadas generadas desde el feedback de testers.',
+          microcopy:
+            'Comienza por P1. No refactorices todo. Corrige, valida y luego avanza a la siguiente prioridad.',
+          labels: {
+            reason: 'Razon:',
+            action: 'Accion sugerida:',
+            validation: 'Validacion esperada:',
+          },
+          p1: {
+            title: 'Reducir severidad alta en flujo principal',
+            reason:
+              'Hay un reporte de severidad alta que afecta la estabilidad funcional.',
+            action:
+              'Prioriza fixes en rutas frecuentes y refuerza manejo de error/reintento.',
+            validation:
+              'Ejecuta smoke suite en flujos clave y verifica ausencia de regresiones.',
+          },
+          p2: {
+            title: 'Estabilizar pantalla mas reportada',
+            reason:
+              'PublishAlertScreen concentra reportes clave y merece foco temprano.',
+            action:
+              'Audita eventos, estados y errores en PublishAlertScreen para reducir friccion.',
+            validation:
+              'Corre validaciones manuales guiadas en PublishAlertScreen con al menos 3 escenarios reales.',
+          },
+          p3: {
+            title: 'Mitigar impacto fuerte de uso',
+            reason:
+              'Existe un reporte que indica alto impacto en continuidad de uso.',
+            action:
+              'Resuelve bloqueos de flujo/UX y mejora feedback visual en operaciones de alto riesgo.',
+            validation:
+              'Compara antes/despues con testers beta y confirma mejora percibida del flujo.',
+          },
+          p4: {
+            title: 'Cerrar brechas de decision de release',
+            reason:
+              'Hay senales de friccion de release en las recomendaciones de testers.',
+            action:
+              'Convierte recomendaciones de no-release en checklist de fixes con responsables y ETA.',
+            validation:
+              'Repite export beta y confirma reduccion de recomendaciones negativas.',
+          },
+          p5: {
+            title: 'Atender observacion UX destacada',
+            reason:
+              'El flujo no indica claramente si el envio fallo o sigue en progreso.',
+            action:
+              'Aplica ajuste UX puntual y documenta criterio para consistencia futura.',
+            validation:
+              'Valida con una prueba cualitativa rapida que se entienda el nuevo estado.',
+          },
+        },
+        promptViewer: {
+          title: 'Visor de Prompt IA',
+          description:
+            'Revisa el prompt de correccion antes de copiarlo en tu asistente de codigo IA.',
+          expand: 'Expandir prompt',
+          collapse: 'Contraer prompt',
+          copy: 'Copiar prompt',
+          copied: 'Prompt copiado',
+          promptText:
+            'Actua como un ingeniero senior corrigiendo una app Flutter basada en feedback beta real.\n\nDecision de publicacion: GO CON CONDICIONES\nBeta Confidence Score: 65/100 (Confianza media)\n\nPrioridades del plan 48h:\n- P1: Reducir severidad alta en flujo principal.\n- P2: Estabilizar pantalla mas reportada.\n- P3: Mitigar impacto fuerte de uso.\n- P4: Cerrar brechas de decision de release.\n- P5: Atender observacion UX destacada.\n\nRestricciones obligatorias:\n- No hacer refactor general.\n- Corregir por orden de prioridad 48h.\n- Mantener compatibilidad hacia atras.\n- Ejecutar analyze y tests al final.\n\nFormato esperado de respuesta:\n1. Archivos modificados.\n2. Causa.\n3. Solucion.\n4. Validacion (incluye analyze/tests).',
+        },
+        downloadOutputs: {
+          title: 'Descargar salidas demo',
+          downloadButton: 'Descargar',
+          viewMarkdown: 'Ver Markdown',
+          json: {
+            title: 'Reporte JSON',
+            description: 'Datos estructurados de reportes beta.',
+          },
+          csv: {
+            title: 'Reporte CSV',
+            description: 'Exportacion de reportes para hojas de calculo.',
+          },
+          markdown: {
+            title: 'Resumen Markdown',
+            description:
+              'Executive Report con decision, score, plan de accion y prompt IA.',
+          },
+        },
+      },
       status: {
         title: 'Estado del SDK',
         sdkVersion: 'Version del SDK',
@@ -611,6 +1018,7 @@
       cta: {
         title: 'Listo para profesionalizar tu flujo beta',
         body: 'Empieza con instalacion minima y evoluciona hacia decisiones de release basadas en evidencia.',
+        tryDemo: 'Probar la demo',
         button: 'Ver en GitHub',
       },
       footer: {
@@ -657,6 +1065,8 @@
       button.classList.toggle('is-active', isActive);
       button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
+
+    syncAiPromptViewerState();
 
     localStorage.setItem(STORAGE_KEY, lang);
   }
@@ -764,6 +1174,89 @@
     });
   }
 
+  function setActionPlanState(button, expanded) {
+    const panelId = button.getAttribute('aria-controls');
+    const panel = panelId ? document.getElementById(panelId) : null;
+    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    if (panel) {
+      panel.hidden = !expanded;
+    }
+  }
+
+  function setupActionPlanAccordion() {
+    const triggers = Array.from(
+      document.querySelectorAll('[data-action-plan-trigger]'),
+    );
+    if (triggers.length === 0) {
+      return;
+    }
+
+    triggers.forEach((button) => {
+      setActionPlanState(button, false);
+      button.addEventListener('click', () => {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        triggers.forEach((otherButton) => {
+          if (otherButton !== button) {
+            setActionPlanState(otherButton, false);
+          }
+        });
+        setActionPlanState(button, !isExpanded);
+      });
+    });
+  }
+
+  function syncAiPromptViewerState() {
+    const toggleButton = document.querySelector('[data-ai-prompt-toggle]');
+    if (!toggleButton) {
+      return;
+    }
+
+    const dictionary = translations[currentLang] || translations.en;
+    const expanded = toggleButton.getAttribute('aria-expanded') === 'true';
+    toggleButton.textContent = expanded
+      ? dictionary.executiveReport.promptViewer.collapse
+      : dictionary.executiveReport.promptViewer.expand;
+  }
+
+  function setupAiPromptViewer() {
+    const toggleButton = document.querySelector('[data-ai-prompt-toggle]');
+    const copyButton = document.querySelector('[data-ai-prompt-copy]');
+    const preview = document.querySelector('[data-ai-prompt-preview]');
+    const promptCode = preview ? preview.querySelector('code') : null;
+
+    if (!toggleButton || !copyButton || !preview || !promptCode) {
+      return;
+    }
+
+    toggleButton.addEventListener('click', () => {
+      const expanded = toggleButton.getAttribute('aria-expanded') === 'true';
+      const nextExpanded = !expanded;
+      toggleButton.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+      preview.classList.toggle('is-collapsed', !nextExpanded);
+      syncAiPromptViewerState();
+    });
+
+    copyButton.addEventListener('click', async () => {
+      const dictionary = translations[currentLang] || translations.en;
+      const copied = await copyToClipboard(promptCode.textContent || '');
+      if (!copied) {
+        return;
+      }
+
+      copyButton.textContent = dictionary.executiveReport.promptViewer.copied;
+      copyButton.classList.add('is-success');
+      window.setTimeout(() => {
+        const fallbackDictionary = translations[currentLang] || translations.en;
+        copyButton.textContent = fallbackDictionary.executiveReport.promptViewer.copy;
+        copyButton.classList.remove('is-success');
+      }, 1400);
+    });
+
+    preview.classList.add('is-collapsed');
+    toggleButton.setAttribute('aria-expanded', 'false');
+    syncAiPromptViewerState();
+  }
+
   const stored = localStorage.getItem(STORAGE_KEY);
   const initialLang = stored === 'es' ? 'es' : 'en';
   applyLanguage(initialLang);
@@ -784,4 +1277,6 @@
   });
 
   setupFaqAccordion();
+  setupActionPlanAccordion();
+  setupAiPromptViewer();
 })();
