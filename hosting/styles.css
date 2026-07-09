@@ -82,6 +82,13 @@ body {
   animation: fade-up 0.7s ease both;
 }
 
+.hero__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .badge {
   display: inline-block;
   margin: 0 0 1rem;
@@ -94,6 +101,38 @@ body {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+  padding: 0.26rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(214, 226, 234, 0.32);
+  background: rgba(8, 39, 61, 0.45);
+}
+
+.language-switch__button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+}
+
+.language-switch__button.is-active {
+  color: #ffffff;
+  background: rgba(249, 115, 22, 0.2);
+}
+
+.language-switch__separator {
+  color: rgba(214, 226, 234, 0.6);
 }
 
 h1 {
@@ -115,6 +154,24 @@ h1 {
 }
 
 .brand-flow {
+  color: var(--accent);
+}
+
+.hero-subtitle {
+  margin: 0.6rem 0 0;
+  color: #ffffff;
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-weight: 600;
+}
+
+.hero-flow {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hero-flow span {
   color: var(--accent);
 }
 
@@ -232,6 +289,48 @@ li {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
 }
 
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.flow-card {
+  border: 1px solid rgba(214, 226, 234, 0.24);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.status-card {
+  border: 1px solid rgba(214, 226, 234, 0.24);
+  border-radius: 12px;
+  padding: 0.85rem 0.9rem;
+  background: rgba(8, 39, 61, 0.62);
+}
+
+.status-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.status-value {
+  margin: 0.2rem 0 0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.status-value--ok {
+  color: var(--accent);
+}
+
 pre {
   margin: 0.95rem 0 0;
   padding: 0.9rem;
@@ -293,11 +392,29 @@ code {
   .metrics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .flow-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 520px) {
   .hero {
     padding-top: 4.2rem;
+  }
+
+  .hero__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .language-switch {
+    margin-bottom: 0.4rem;
   }
 
   .btn {

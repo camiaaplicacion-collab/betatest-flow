@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="BetaTest Flow: Flutter Beta Testing SDK para capturar feedback real y generar decisiones de release accionables.">
+    <meta id="meta-description" name="description" content="BetaTest Flow: Flutter Beta Testing SDK to capture real feedback and ship with confidence.">
     <title>BetaTest Flow | Flutter Beta Testing SDK</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -22,71 +22,104 @@
     <header class="hero">
       <div class="hero__gradient" aria-hidden="true"></div>
       <div class="container hero__content">
-        <p class="badge">v0.1.0 / DX Web</p>
+        <div class="hero__top">
+          <p class="badge">v0.1.0 / DX Web</p>
+          <nav class="language-switch" aria-label="Language selector">
+            <button class="language-switch__button" type="button" data-lang="en" aria-pressed="true">English</button>
+            <span class="language-switch__separator" aria-hidden="true">|</span>
+            <button class="language-switch__button" type="button" data-lang="es" aria-pressed="false">Español</button>
+          </nav>
+        </div>
         <h1 class="brand-wordmark"><span class="brand-betatest">BetaTest</span> <span class="brand-flow">Flow</span></h1>
-        <p class="lead">
-          Captura feedback beta estructurado, exporta reportes ejecutivos y transforma ruido de QA en acciones claras para publicar con confianza.
-        </p>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">Flutter Beta Testing SDK</p>
+        <p class="hero-flow" data-i18n-html="hero.flow">Collect feedback.<br>Analyze results.<br><span>Ship with confidence.</span></p>
+        <p class="lead" data-i18n="hero.lead">Capture structured beta feedback, export executive reports, and turn QA noise into clear release actions.</p>
         <div class="hero__actions">
-          <a class="btn btn--primary" href="#instalacion">Instalacion rapida</a>
-          <a class="btn btn--ghost" href="#demo-offline">Ver demo offline</a>
+          <a class="btn btn--primary" href="#instalacion" data-i18n="hero.ctaStart">Get Started</a>
+          <a class="btn btn--ghost" href="#informe" data-i18n="hero.ctaDemo">View Demo Report</a>
         </div>
       </div>
     </header>
 
     <main>
       <section id="problema" class="section container card">
-        <h2>Problema</h2>
-        <p>
-          En betas reales, el feedback suele quedar disperso en chats, capturas y notas aisladas. Eso retrasa fixes criticos y vuelve subjetiva la decision de publicar.
-        </p>
+        <h2 data-i18n="problem.title">Problem</h2>
+        <p data-i18n="problem.body">In real betas, feedback gets scattered across chats, screenshots, and notes. That slows critical fixes and makes release decisions subjective.</p>
       </section>
 
       <section id="solucion" class="section container card">
-        <h2>Solucion</h2>
-        <p>
-          BetaTest Flow estandariza la captura de reportes en Flutter y genera salidas operativas: Executive Report, Release Decision, Beta Confidence Score, Plan de accion 48h y AI Correction Prompt.
-        </p>
+        <h2 data-i18n="solution.title">Solution</h2>
+        <p data-i18n="solution.body">BetaTest Flow standardizes Flutter report capture and produces actionable outputs: Executive Report, Release Decision, Beta Confidence Score, 48h Action Plan, and AI Correction Prompt.</p>
+      </section>
+
+      <section id="collect-analyze-ship" class="section container card">
+        <h2 data-i18n="cas.title">Collect. Analyze. Ship.</h2>
+        <div class="flow-grid">
+          <article class="flow-card">
+            <h3 data-i18n="cas.collect.title">Collect</h3>
+            <ul>
+              <li data-i18n="cas.collect.li1">Embed a reusable feedback widget.</li>
+              <li data-i18n="cas.collect.li2">Capture structured beta reports.</li>
+              <li data-i18n="cas.collect.li3">Avoid spreadsheets and scattered feedback.</li>
+            </ul>
+          </article>
+          <article class="flow-card">
+            <h3 data-i18n="cas.analyze.title">Analyze</h3>
+            <ul>
+              <li data-i18n="cas.analyze.li1">Generate Executive Reports.</li>
+              <li data-i18n="cas.analyze.li2">Get Release Decisions.</li>
+              <li data-i18n="cas.analyze.li3">Track Beta Confidence Score.</li>
+            </ul>
+          </article>
+          <article class="flow-card">
+            <h3 data-i18n="cas.ship.title">Ship</h3>
+            <ul>
+              <li data-i18n="cas.ship.li1">Use the 48h Action Plan.</li>
+              <li data-i18n="cas.ship.li2">Copy the AI Correction Prompt.</li>
+              <li data-i18n="cas.ship.li3">Fix with Copilot, Cursor, ChatGPT or Gemini.</li>
+            </ul>
+          </article>
+        </div>
       </section>
 
       <section id="como-funciona" class="section container card">
-        <h2>Como funciona</h2>
+        <h2 data-i18n="how.title">How it works</h2>
         <ol class="steps">
-          <li>Integras el SDK en tu app Flutter y habilitas el boton de feedback.</li>
-          <li>Recolectas reportes estructurados por campana en Firestore o JSON offline.</li>
-          <li>Ejecutas export y obtienes un resumen ejecutivo con decision y plan de accion.</li>
+          <li data-i18n="how.li1">Integrate the SDK in your Flutter app and enable the feedback widget.</li>
+          <li data-i18n="how.li2">Collect structured campaign reports in Firestore or offline JSON.</li>
+          <li data-i18n="how.li3">Run export and get an executive summary with decision and action plan.</li>
         </ol>
       </section>
 
       <section id="informe" class="section container card">
-        <h2>Vista del informe ejecutivo</h2>
+        <h2 data-i18n="report.title">Executive report preview</h2>
         <div class="metrics-grid">
           <article class="metric-card">
             <h3>Executive Report</h3>
-            <p>Resumen operativo de severidad, resultados, pantallas y observaciones UX.</p>
+            <p data-i18n="report.exec">Operational summary of severity, outcomes, screens, and UX observations.</p>
           </article>
           <article class="metric-card">
             <h3>Release Decision</h3>
-            <p>Estado GO / GO CON CONDICIONES / NO-GO con razon y condiciones de salida.</p>
+            <p data-i18n="report.decision">GO / GO WITH CONDITIONS / NO-GO state with rationale and release conditions.</p>
           </article>
           <article class="metric-card">
             <h3>Beta Confidence Score</h3>
-            <p>Score global y subscores para estabilidad, usabilidad y release readiness.</p>
+            <p data-i18n="report.score">Overall score plus subscores for stability, usability, and release readiness.</p>
           </article>
           <article class="metric-card">
-            <h3>Plan de accion 48h</h3>
-            <p>Priorizacion P1-P5 con accion sugerida y criterio de validacion por item.</p>
+            <h3 data-i18n="report.planTitle">48h Action Plan</h3>
+            <p data-i18n="report.planBody">P1-P5 prioritization with suggested action and validation criteria per item.</p>
           </article>
           <article class="metric-card">
             <h3>AI Correction Prompt</h3>
-            <p>Prompt listo para ejecutar correcciones guiadas por evidencia real de beta.</p>
+            <p data-i18n="report.prompt">Prompt ready to execute corrections guided by real beta evidence.</p>
           </article>
         </div>
       </section>
 
       <section id="instalacion" class="section container card">
-        <h2>Instalacion rapida</h2>
-        <p>Agrega la dependencia del SDK en la app host y sincroniza paquetes.</p>
+        <h2 data-i18n="install.title">Quick install</h2>
+        <p data-i18n="install.body">Add the SDK dependency in the host app and sync packages.</p>
         <pre><code>dependencies:
   betatest_flow:
     path: ../betatest_flow
@@ -95,37 +128,49 @@ flutter pub get</code></pre>
       </section>
 
       <section id="demo-offline" class="section container card">
-        <h2>Demo offline</h2>
-        <p>Genera reportes sin depender de Firestore usando el fixture oficial del proyecto.</p>
+        <h2 data-i18n="offline.title">Offline demo</h2>
+        <p data-i18n="offline.body">Generate reports without Firestore by using the project's official fixture.</p>
         <pre><code>dart run tools/export_beta_reports.dart \
   --input-json example/data/sample_beta_reports.json \
   --out-dir exports/demo</code></pre>
       </section>
 
+      <section id="sdk-status" class="section container card">
+        <h2 data-i18n="status.title">SDK Status</h2>
+        <div class="status-grid">
+          <article class="status-card"><p class="status-label" data-i18n="status.sdkVersion">SDK Version</p><p class="status-value">v0.0.3-beta</p></article>
+          <article class="status-card"><p class="status-label" data-i18n="status.analysisEngine">Analysis Engine</p><p class="status-value status-value--ok" data-i18n="status.ready">Ready</p></article>
+          <article class="status-card"><p class="status-label" data-i18n="status.executiveReport">Executive Report</p><p class="status-value status-value--ok" data-i18n="status.ready">Ready</p></article>
+          <article class="status-card"><p class="status-label" data-i18n="status.offlineMode">Offline Mode</p><p class="status-value" data-i18n="status.available">Available</p></article>
+          <article class="status-card"><p class="status-label" data-i18n="status.tests">Tests</p><p class="status-value" data-i18n="status.testsValue">19 passing</p></article>
+          <article class="status-card"><p class="status-label">Flutter</p><p class="status-value">&gt;= 3.35.0</p></article>
+          <article class="status-card"><p class="status-label" data-i18n="status.backwardCompatibility">Backwards Compatibility</p><p class="status-value" data-i18n="status.preserved">Preserved</p></article>
+        </div>
+      </section>
+
       <section id="roadmap" class="section container card">
-        <h2>Roadmap</h2>
+        <h2 data-i18n="roadmap.title">Roadmap</h2>
         <ul class="roadmap-list">
-          <li><strong>v0.0.1-rc1:</strong> SDK reutilizable validado.</li>
-          <li><strong>v0.0.2-alpha:</strong> Paridad funcional BUSKIA.</li>
-          <li><strong>v0.0.3-beta:</strong> Analysis Engine + Executive Report + Decision + Score + Plan 48h + AI Prompt.</li>
-          <li><strong>v0.1.0:</strong> Experiencia profesional para developers y adopcion multi-equipo.</li>
-          <li><strong>v1.0.0:</strong> Plataforma madura de beta testing.</li>
+          <li><strong>v0.0.1-rc1:</strong> <span data-i18n="roadmap.v001">Reusable SDK validated.</span></li>
+          <li><strong>v0.0.2-alpha:</strong> <span data-i18n="roadmap.v002">BUSKIA functional parity.</span></li>
+          <li><strong>v0.0.3-beta:</strong> <span data-i18n="roadmap.v003">Analysis Engine + Executive Report + Decision + Score + 48h Plan + AI Prompt.</span></li>
+          <li><strong>v0.1.0:</strong> <span data-i18n="roadmap.v010">Professional developer experience and multi-team adoption.</span></li>
+          <li><strong>v1.0.0:</strong> <span data-i18n="roadmap.v100">Mature beta testing platform.</span></li>
         </ul>
       </section>
 
       <section id="cta" class="section container card cta-card">
-        <h2>Listo para profesionalizar tu flujo beta</h2>
-        <p>
-          Empieza con instalacion minima y evoluciona hacia decisiones de release basadas en evidencia.
-        </p>
-        <a class="btn btn--primary" href="https://github.com" target="_blank" rel="noreferrer">Ver GitHub</a>
+        <h2 data-i18n="cta.title">Ready to professionalize your beta workflow</h2>
+        <p data-i18n="cta.body">Start with minimal setup and evolve into evidence-based release decisions.</p>
+        <a class="btn btn--primary" href="https://github.com" target="_blank" rel="noreferrer" data-i18n="cta.button">View on GitHub</a>
       </section>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>BetaTest Flow SDK v0.1.0 | Legal: Privacidad | Terminos | Licencia</p>
+        <p data-i18n="footer.legal">BetaTest Flow SDK v0.1.0 | Legal: Privacy | Terms | License</p>
       </div>
     </footer>
+    <script src="i18n.js"></script>
   </body>
 </html>
