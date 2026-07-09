@@ -15,23 +15,41 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
+  <body id="top">
     <div class="bg-orb bg-orb--left" aria-hidden="true"></div>
     <div class="bg-orb bg-orb--right" aria-hidden="true"></div>
+
+    <header class="top-nav">
+      <div class="container top-nav__inner">
+        <a class="top-nav__brand" href="#top" aria-label="BetaTest Flow home">
+          <span class="brand-betatest">BetaTest</span>
+          <span class="brand-flow">Flow</span>
+        </a>
+
+        <nav class="top-nav__links" aria-label="Primary">
+          <a class="top-nav__link" href="#top" data-i18n="nav.home">Home</a>
+          <a class="top-nav__link" href="#documentation" data-i18n="nav.documentation">Documentation</a>
+          <a class="top-nav__link" href="#executive-report" data-i18n="nav.demo">Demo</a>
+          <a class="top-nav__link" href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+          <a class="top-nav__link" href="https://github.com" target="_blank" rel="noreferrer" data-i18n="nav.github">GitHub</a>
+        </nav>
+
+        <div class="top-nav__actions">
+          <nav class="language-switch" aria-label="Language selector">
+            <button class="language-switch__button" type="button" data-lang="en" aria-pressed="true">English</button>
+            <span class="language-switch__separator" aria-hidden="true">|</span>
+            <button class="language-switch__button" type="button" data-lang="es" aria-pressed="false">Español</button>
+          </nav>
+          <button class="btn btn--ghost top-nav__share" type="button" data-share-trigger data-i18n="share.hero">Share</button>
+        </div>
+      </div>
+    </header>
 
     <header class="hero">
       <div class="hero__gradient" aria-hidden="true"></div>
       <div class="container hero__content">
         <div class="hero__top">
           <p class="badge">v0.1.0 / DX Web</p>
-          <div class="hero__controls">
-            <a class="top-link" href="#documentation" data-i18n="nav.documentation">Documentation</a>
-            <nav class="language-switch" aria-label="Language selector">
-              <button class="language-switch__button" type="button" data-lang="en" aria-pressed="true">English</button>
-              <span class="language-switch__separator" aria-hidden="true">|</span>
-              <button class="language-switch__button" type="button" data-lang="es" aria-pressed="false">Español</button>
-            </nav>
-          </div>
         </div>
         <h1 class="brand-wordmark"><span class="brand-betatest">BetaTest</span> <span class="brand-flow">Flow</span></h1>
         <p class="hero-subtitle" data-i18n="hero.subtitle">Flutter Beta Testing SDK</p>
@@ -507,39 +525,40 @@ BetaFeedbackButton(
         <h2 data-i18n="executiveReport.title">Executive Report Dashboard (Demo)</h2>
         <p data-i18n="executiveReport.intro">Live demo values generated from the official fixture sample_beta_reports.json.</p>
         <p class="executive-source" data-i18n="executiveReport.source">Source fixture: example/data/sample_beta_reports.json (3 reports)</p>
+        <p class="executive-demo-status" data-demo-status data-i18n="executiveReport.demoStatus.loaded">Demo data loaded from beta_reports.json</p>
 
         <div class="executive-grid">
           <article class="executive-card">
             <h3 data-i18n="executiveReport.decision.title">Release Decision</h3>
-            <p class="executive-badge" data-i18n="executiveReport.decision.value">GO WITH CONDITIONS</p>
-            <p data-i18n="executiveReport.decision.reason">Relevant risks remain; proceed only with mitigation and additional validation.</p>
+            <p class="executive-badge" data-demo-release-decision data-i18n="executiveReport.decision.value">GO WITH CONDITIONS</p>
+            <p data-demo-release-reason data-i18n="executiveReport.decision.reason">Relevant risks remain; proceed only with mitigation and additional validation.</p>
           </article>
 
           <article class="executive-card">
             <h3 data-i18n="executiveReport.score.title">Beta Confidence Score</h3>
-            <p class="executive-score" data-i18n="executiveReport.score.overall">65/100 (Medium confidence)</p>
+            <p class="executive-score" data-demo-score-overall data-i18n="executiveReport.score.overall">65/100 (Medium confidence)</p>
             <ul>
-              <li data-i18n="executiveReport.score.stability">Stability: 80/100</li>
-              <li data-i18n="executiveReport.score.usability">Usability: 80/100</li>
-              <li data-i18n="executiveReport.score.readiness">Release readiness: 78/100</li>
+              <li data-demo-score-stability data-i18n="executiveReport.score.stability">Stability: 80/100</li>
+              <li data-demo-score-usability data-i18n="executiveReport.score.usability">Usability: 80/100</li>
+              <li data-demo-score-readiness data-i18n="executiveReport.score.readiness">Release readiness: 78/100</li>
             </ul>
           </article>
 
           <article class="executive-card">
             <h3 data-i18n="executiveReport.topIssues.title">Top Issues</h3>
             <ul>
-              <li data-i18n="executiveReport.topIssues.issue1">[tester_001] (high / failed) Publish button keeps loading and does not complete.</li>
+              <li data-demo-top-issue data-i18n="executiveReport.topIssues.issue1">[tester_001] (high / failed) Publish button keeps loading and does not complete.</li>
             </ul>
           </article>
 
           <article class="executive-card">
             <h3 data-i18n="executiveReport.actionPlan.title">Action Plan 48h</h3>
             <ol>
-              <li data-i18n="executiveReport.actionPlan.p1">P1: Reduce high severity in main flow (PublishAlertScreen).</li>
-              <li data-i18n="executiveReport.actionPlan.p2">P2: Stabilize most reported screen with guided scenarios.</li>
-              <li data-i18n="executiveReport.actionPlan.p3">P3: Mitigate high usage impact with UX/error feedback improvements.</li>
-              <li data-i18n="executiveReport.actionPlan.p4">P4: Close release blockers with owners and ETA.</li>
-              <li data-i18n="executiveReport.actionPlan.p5">P5: Resolve highlighted UX ambiguity in publish flow state.</li>
+              <li data-demo-plan-short-1 data-i18n="executiveReport.actionPlan.p1">P1: Reduce high severity in main flow (PublishAlertScreen).</li>
+              <li data-demo-plan-short-2 data-i18n="executiveReport.actionPlan.p2">P2: Stabilize most reported screen with guided scenarios.</li>
+              <li data-demo-plan-short-3 data-i18n="executiveReport.actionPlan.p3">P3: Mitigate high usage impact with UX/error feedback improvements.</li>
+              <li data-demo-plan-short-4 data-i18n="executiveReport.actionPlan.p4">P4: Close release blockers with owners and ETA.</li>
+              <li data-demo-plan-short-5 data-i18n="executiveReport.actionPlan.p5">P5: Resolve highlighted UX ambiguity in publish flow state.</li>
             </ol>
           </article>
 
@@ -563,20 +582,20 @@ Priority: P1 Publish flow high severity, then P2-P5 in 48h.</code></pre>
               <p class="metric-chart__total" data-i18n="executiveReport.metrics.severity.total">Total analyzed: 3 reports</p>
               <div class="metric-bars">
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.critical">Critical</span><strong>0</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 0%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.critical">Critical</span><strong data-demo-severity-critical>0</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-severity-critical style="--bar-value: 0%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.high">High</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.high">High</span><strong data-demo-severity-high>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-severity-high style="--bar-value: 33.33%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.medium">Medium</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.medium">Medium</span><strong data-demo-severity-medium>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-severity-medium style="--bar-value: 33.33%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.low">Low</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.low">Low</span><strong data-demo-severity-low>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-severity-low style="--bar-value: 33.33%;"></span></div>
                 </div>
               </div>
             </article>
@@ -587,20 +606,20 @@ Priority: P1 Publish flow high severity, then P2-P5 in 48h.</code></pre>
               <p class="metric-chart__total" data-i18n="executiveReport.metrics.result.total">Total analyzed: 3 reports</p>
               <div class="metric-bars">
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.workedWell">Worked Well</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.workedWell">Worked Well</span><strong data-demo-result-workedwell>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-result-workedwell style="--bar-value: 33.33%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.worked">Worked</span><strong>0</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 0%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.worked">Worked</span><strong data-demo-result-worked>0</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-result-worked style="--bar-value: 0%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.needsImprovements">Needs Improvements</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.needsImprovements">Needs Improvements</span><strong data-demo-result-needsimprovements>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-result-needsimprovements style="--bar-value: 33.33%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.didntWork">Didn't Work</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.didntWork">Didn't Work</span><strong data-demo-result-didntwork>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-result-didntwork style="--bar-value: 33.33%;"></span></div>
                 </div>
               </div>
             </article>
@@ -611,16 +630,16 @@ Priority: P1 Publish flow high severity, then P2-P5 in 48h.</code></pre>
               <p class="metric-chart__total" data-i18n="executiveReport.metrics.publish.total">Total analyzed: 3 reports</p>
               <div class="metric-bars">
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.yes">Yes</span><strong>2</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 66.67%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.yes">Yes</span><strong data-demo-publish-yes>2</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-publish-yes style="--bar-value: 66.67%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.notYet">Not Yet</span><strong>1</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 33.33%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.notYet">Not Yet</span><strong data-demo-publish-notyet>1</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-publish-notyet style="--bar-value: 33.33%;"></span></div>
                 </div>
                 <div class="metric-row">
-                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.no">No</span><strong>0</strong></div>
-                  <div class="metric-bar"><span class="metric-bar__fill" style="--bar-value: 0%;"></span></div>
+                  <div class="metric-row__top"><span data-i18n="executiveReport.metrics.labels.no">No</span><strong data-demo-publish-no>0</strong></div>
+                  <div class="metric-bar"><span class="metric-bar__fill" data-demo-bar-publish-no style="--bar-value: 0%;"></span></div>
                 </div>
               </div>
             </article>
@@ -628,11 +647,11 @@ Priority: P1 Publish flow high severity, then P2-P5 in 48h.</code></pre>
             <article class="executive-card metric-summary">
               <h4 data-i18n="executiveReport.metrics.summary.title">Report Summary</h4>
               <ul>
-                <li><strong data-i18n="executiveReport.metrics.summary.totalReportsLabel">Total reports:</strong> <span data-i18n="executiveReport.metrics.summary.totalReportsValue">3</span></li>
-                <li><strong data-i18n="executiveReport.metrics.summary.mostAffectedScreenLabel">Most affected screen:</strong> <span data-i18n="executiveReport.metrics.summary.mostAffectedScreenValue">PublishAlertScreen</span></li>
-                <li><strong data-i18n="executiveReport.metrics.summary.highestSeverityLabel">Highest severity:</strong> <span data-i18n="executiveReport.metrics.summary.highestSeverityValue">High</span></li>
-                <li><strong data-i18n="executiveReport.metrics.summary.releaseDecisionLabel">Release Decision:</strong> <span data-i18n="executiveReport.metrics.summary.releaseDecisionValue">GO WITH CONDITIONS</span></li>
-                <li><strong data-i18n="executiveReport.metrics.summary.confidenceScoreLabel">Confidence Score:</strong> <span data-i18n="executiveReport.metrics.summary.confidenceScoreValue">65/100 (Medium confidence)</span></li>
+                <li><strong data-i18n="executiveReport.metrics.summary.totalReportsLabel">Total reports:</strong> <span data-demo-summary-total data-i18n="executiveReport.metrics.summary.totalReportsValue">3</span></li>
+                <li><strong data-i18n="executiveReport.metrics.summary.mostAffectedScreenLabel">Most affected screen:</strong> <span data-demo-summary-screen data-i18n="executiveReport.metrics.summary.mostAffectedScreenValue">PublishAlertScreen</span></li>
+                <li><strong data-i18n="executiveReport.metrics.summary.highestSeverityLabel">Highest severity:</strong> <span data-demo-summary-severity data-i18n="executiveReport.metrics.summary.highestSeverityValue">High</span></li>
+                <li><strong data-i18n="executiveReport.metrics.summary.releaseDecisionLabel">Release Decision:</strong> <span data-demo-summary-decision data-i18n="executiveReport.metrics.summary.releaseDecisionValue">GO WITH CONDITIONS</span></li>
+                <li><strong data-i18n="executiveReport.metrics.summary.confidenceScoreLabel">Confidence Score:</strong> <span data-demo-summary-score data-i18n="executiveReport.metrics.summary.confidenceScoreValue">65/100 (Medium confidence)</span></li>
               </ul>
             </article>
           </div>
@@ -770,7 +789,7 @@ Priority: P1 Publish flow high severity, then P2-P5 in 48h.</code></pre>
             <button class="btn btn--ghost ai-prompt-viewer__btn" type="button" data-ai-prompt-copy data-i18n="executiveReport.promptViewer.copy">Copy Prompt</button>
           </div>
 
-          <pre class="ai-prompt-viewer__preview is-collapsed" data-ai-prompt-preview><code data-i18n="executiveReport.promptViewer.promptText">Act as a senior engineer fixing a Flutter app using real beta feedback.
+          <pre class="ai-prompt-viewer__preview is-collapsed" data-ai-prompt-preview><code data-demo-prompt-text data-i18n="executiveReport.promptViewer.promptText">Act as a senior engineer fixing a Flutter app using real beta feedback.
 
 Release Decision: GO WITH CONDITIONS
 Beta Confidence Score: 65/100 (Medium confidence)

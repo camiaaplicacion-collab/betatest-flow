@@ -29,6 +29,73 @@ body {
   line-height: 1.6;
   position: relative;
   min-height: 100vh;
+  padding-top: 4.2rem;
+}
+
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid rgba(214, 226, 234, 0.26);
+  background: rgba(6, 28, 44, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.top-nav__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 4rem;
+}
+
+.top-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  text-decoration: none;
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.top-nav__links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.top-nav__link {
+  text-decoration: none;
+  color: #e8f4fb;
+  font-size: 0.87rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.24rem 0.55rem;
+  white-space: nowrap;
+}
+
+.top-nav__link:hover {
+  border-color: rgba(249, 115, 22, 0.45);
+  color: #fff0e4;
+}
+
+.top-nav__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.top-nav__actions .language-switch {
+  margin: 0;
+}
+
+.top-nav__share {
+  padding: 0.42rem 0.65rem;
+  font-size: 0.82rem;
 }
 
 .bg-orb {
@@ -64,7 +131,7 @@ body {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 4.8rem 0 3.2rem;
+  padding: 4.1rem 0 3.2rem;
   border-bottom: 1px solid var(--border);
 }
 
@@ -560,6 +627,12 @@ li {
   font-size: 0.9rem;
 }
 
+.executive-demo-status {
+  margin-top: 0.25rem;
+  color: #d6e2ea;
+  font-size: 0.84rem;
+}
+
 .executive-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -1043,8 +1116,33 @@ code {
 }
 
 @media (max-width: 520px) {
+  body {
+    padding-top: 4.5rem;
+  }
+
+  .top-nav__inner {
+    grid-template-columns: 1fr;
+    gap: 0.42rem;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+    min-height: 0;
+  }
+
+  .top-nav__links {
+    width: 100%;
+  }
+
+  .top-nav__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .top-nav__share {
+    min-width: 100px;
+  }
+
   .hero {
-    padding-top: 4.2rem;
+    padding-top: 3.4rem;
   }
 
   .hero__top {

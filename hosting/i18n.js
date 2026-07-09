@@ -17,7 +17,11 @@
         ctaDemo: 'View Demo Report',
       },
       nav: {
+        home: 'Home',
         documentation: 'Documentation',
+        demo: 'Demo',
+        roadmap: 'Roadmap',
+        github: 'GitHub',
       },
       shared: {
         getAiPromptCta: 'Get AI Fix Prompt',
@@ -284,6 +288,10 @@
         intro:
           'Live demo values generated from the official fixture sample_beta_reports.json.',
         source: 'Source fixture: example/data/sample_beta_reports.json (3 reports)',
+        demoStatus: {
+          loaded: 'Demo data loaded from beta_reports.json',
+          fallback: 'Using embedded fallback demo data',
+        },
         decision: {
           title: 'Release Decision',
           value: 'GO WITH CONDITIONS',
@@ -527,7 +535,11 @@
         ctaDemo: 'Ver Reporte Demo',
       },
       nav: {
+        home: 'Inicio',
         documentation: 'Documentacion',
+        demo: 'Demo',
+        roadmap: 'Roadmap',
+        github: 'GitHub',
       },
       shared: {
         getAiPromptCta: 'Obtener prompt IA',
@@ -796,6 +808,10 @@
           'Valores de demo generados desde el fixture oficial sample_beta_reports.json.',
         source:
           'Fixture fuente: example/data/sample_beta_reports.json (3 reportes)',
+        demoStatus: {
+          loaded: 'Datos demo cargados desde beta_reports.json',
+          fallback: 'Usando datos demo internos de respaldo',
+        },
         decision: {
           title: 'Release Decision',
           value: 'GO CON CONDICIONES',
@@ -1032,6 +1048,463 @@
     return key.split('.').reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : null), obj);
   }
 
+  const fallbackDemoStats = {
+    totalReports: 3,
+    severity: { critical: 0, high: 1, medium: 1, low: 1 },
+    result: { workedWell: 1, worked: 0, needsImprovements: 1, didntWork: 1 },
+    publish: { yes: 2, notYet: 1, no: 0 },
+    mostAffectedScreen: 'PublishAlertScreen',
+    highestSeverity: 'high',
+    releaseDecision: 'GO WITH CONDITIONS',
+    confidence: { overall: 65, level: 'medium', stability: 80, usability: 80, readiness: 78 },
+    topIssue: {
+      userId: 'tester_001',
+      severity: 'high',
+      result: 'didntWork',
+      feedbackText:
+        'Publish button keeps loading and does not complete.',
+    },
+  };
+
+  let demoReportStats = null;
+  let demoReportSource = 'fallback';
+
+  function setText(selector, value) {
+    const element = document.querySelector(selector);
+    if (element && typeof value === 'string') {
+      element.textContent = value;
+    }
+  }
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function setBar(selector, count, total) {
+    const element = document.querySelector(selector);
+    if (!element) {
+      return;
+    }
+    const percentage = total > 0 ? (count / total) * 100 : 0;
+    element.style.setProperty('--bar-value', `${percentage.toFixed(2)}%`);
+  }
+
+  function getSeverityKey(rawSeverity) {
+    const value = String(rawSeverity || '').trim().toLowerCase();
+    if (value === 'critica' || value === 'crtica' || value === 'critical') {
+      return 'critical';
+    }
+    if (value === 'alta' || value === 'high') {
+      return 'high';
+    }
+    if (value === 'media' || value === 'medium') {
+      return 'medium';
+    }
+    return 'low';
+  }
+
+  function getResultKey(rawResult) {
+    const value = String(rawResult || '').trim().toLowerCase();
+    if (value === 'no_funciono' || value === 'no funciono' || value === 'failed') {
+      return 'didntWork';
+    }
+    if (value === 'funciono_a_medias' || value === 'partial' || value === 'partial_success') {
+      return 'needsImprovements';
+    }
+    if (value === 'funciono' || value === 'worked_well') {
+      return 'workedWell';
+    }
+    return 'worked';
+  }
+
+  function getPublishKey(rawRecommendation) {
+    const value = String(rawRecommendation || '').trim().toLowerCase();
+    if (value === 'no' || value === 'dont_publish' || value === 'do_not_publish') {
+      return 'no';
+    }
+    if (value.includes('no todavia') || value.includes('not yet') || value === 'later') {
+      return 'notYet';
+    }
+    return 'yes';
+  }
+
+  function pickHighestSeverity(severityDistribution) {
+    if (severityDistribution.critical > 0) {
+      return 'critical';
+    }
+    if (severityDistribution.high > 0) {
+      return 'high';
+    }
+    if (severityDistribution.medium > 0) {
+      return 'medium';
+    }
+    return 'low';
+  }
+
+  function computeReleaseDecision(severityDistribution, publishDistribution) {
+    if (severityDistribution.critical > 0 || publishDistribution.no > 0) {
+      return 'NO-GO';
+    }
+    if (severityDistribution.high > 0 || publishDistribution.notYet > 0) {
+      return 'GO WITH CONDITIONS';
+    }
+    return 'GO';
+  }
+
+  function computeConfidence(totalReports, severityDistribution, resultDistribution, publishDistribution) {
+    const overallPenalty =
+      severityDistribution.critical * 28 +
+      severityDistribution.high * 15 +
+      resultDistribution.didntWork * 10 +
+      publishDistribution.notYet * 7 +
+      publishDistribution.no * 15;
+    const overall = clamp(Math.round(100 - overallPenalty), 0, 100);
+
+    const stability = clamp(
+      Math.round(100 - severityDistribution.critical * 30 - severityDistribution.high * 20),
+      0,
+      100,
+    );
+
+    const usability = clamp(
+      Math.round(100 - (resultDistribution.needsImprovements + resultDistribution.didntWork) * 10),
+      0,
+      100,
+    );
+
+    const publishReadinessBase = totalReports > 0
+      ? ((publishDistribution.yes + publishDistribution.notYet * 0.5) / totalReports) * 100
+      : 0;
+    const readiness = clamp(Math.round(publishReadinessBase - severityDistribution.high * 5), 0, 100);
+
+    let level = 'low';
+    if (overall >= 75) {
+      level = 'high';
+    } else if (overall >= 50) {
+      level = 'medium';
+    }
+
+    return {
+      overall,
+      level,
+      stability,
+      usability,
+      readiness,
+    };
+  }
+
+  function getMostAffectedScreen(screenCount) {
+    const entries = Object.entries(screenCount);
+    if (entries.length === 0) {
+      return 'N/A';
+    }
+    entries.sort((a, b) => b[1] - a[1]);
+    return entries[0][0];
+  }
+
+  function computeDemoStats(reports) {
+    if (!Array.isArray(reports) || reports.length === 0) {
+      return { ...fallbackDemoStats };
+    }
+
+    const severity = { critical: 0, high: 0, medium: 0, low: 0 };
+    const result = { workedWell: 0, worked: 0, needsImprovements: 0, didntWork: 0 };
+    const publish = { yes: 0, notYet: 0, no: 0 };
+    const screenCount = {};
+
+    let topIssue = null;
+    const severityRank = { low: 1, medium: 2, high: 3, critical: 4 };
+
+    reports.forEach((report) => {
+      const severityKey = getSeverityKey(report && report.severity);
+      const resultKey = getResultKey(report && report.result);
+      const publishKey = getPublishKey(report && report.publishRecommendation);
+
+      severity[severityKey] += 1;
+      result[resultKey] += 1;
+      publish[publishKey] += 1;
+
+      const rawScreen = String((report && report.screenName) || '').trim();
+      if (rawScreen) {
+        screenCount[rawScreen] = (screenCount[rawScreen] || 0) + 1;
+      }
+
+      const candidate = {
+        userId: String((report && report.userId) || 'tester_unknown'),
+        severity: severityKey,
+        result: resultKey,
+        feedbackText: String((report && report.feedbackText) || '').trim(),
+      };
+
+      const currentRank = topIssue ? severityRank[topIssue.severity] : 0;
+      const candidateRank = severityRank[candidate.severity] || 0;
+      if (!topIssue || candidateRank > currentRank) {
+        topIssue = candidate;
+      }
+    });
+
+    const totalReports = reports.length;
+    const highestSeverity = pickHighestSeverity(severity);
+    const releaseDecision = computeReleaseDecision(severity, publish);
+    const confidence = computeConfidence(totalReports, severity, result, publish);
+
+    return {
+      totalReports,
+      severity,
+      result,
+      publish,
+      mostAffectedScreen: getMostAffectedScreen(screenCount),
+      highestSeverity,
+      releaseDecision,
+      confidence,
+      topIssue: topIssue || fallbackDemoStats.topIssue,
+    };
+  }
+
+  function getDecisionText(lang, decision) {
+    if (lang === 'es') {
+      if (decision === 'NO-GO') {
+        return 'NO-GO';
+      }
+      if (decision === 'GO') {
+        return 'GO';
+      }
+      return 'GO CON CONDICIONES';
+    }
+    return decision;
+  }
+
+  function getDecisionReason(lang, decision, highestSeverity) {
+    if (lang === 'es') {
+      if (decision === 'NO-GO') {
+        return 'Se detectaron riesgos criticos o recomendacion de no publicar; cerrar bloqueadores antes de release.';
+      }
+      if (decision === 'GO') {
+        return 'No se observan bloqueadores relevantes; proceder y monitorear con checks post-release.';
+      }
+      return `Persisten riesgos de severidad ${highestSeverity}; avanzar solo con mitigaciones y validacion adicional.`;
+    }
+
+    if (decision === 'NO-GO') {
+      return 'Critical risks or do-not-publish recommendations were found; close blockers before release.';
+    }
+    if (decision === 'GO') {
+      return 'No relevant release blockers detected; proceed and monitor with post-release checks.';
+    }
+    return `Relevant ${highestSeverity} severity risks remain; proceed only with mitigation and additional validation.`;
+  }
+
+  function getConfidenceLabel(lang, level) {
+    if (lang === 'es') {
+      if (level === 'high') {
+        return 'Confianza alta';
+      }
+      if (level === 'medium') {
+        return 'Confianza media';
+      }
+      return 'Confianza baja';
+    }
+
+    if (level === 'high') {
+      return 'High confidence';
+    }
+    if (level === 'medium') {
+      return 'Medium confidence';
+    }
+    return 'Low confidence';
+  }
+
+  function getLocalizedLabel(dictionary, group, key) {
+    const labels = dictionary.executiveReport.metrics.labels;
+    if (group === 'severity') {
+      return labels[key] || key;
+    }
+    if (group === 'result') {
+      return labels[key] || key;
+    }
+    if (group === 'publish') {
+      return labels[key] || key;
+    }
+    return key;
+  }
+
+  function renderDemoReport() {
+    if (!demoReportStats) {
+      return;
+    }
+
+    const dictionary = translations[currentLang] || translations.en;
+    const stats = demoReportStats;
+    const total = stats.totalReports;
+
+    const decisionText = getDecisionText(currentLang, stats.releaseDecision);
+    const highestSeverityLabel = getLocalizedLabel(dictionary, 'severity', stats.highestSeverity);
+    const confidenceText = `${stats.confidence.overall}/100 (${getConfidenceLabel(currentLang, stats.confidence.level)})`;
+
+    const statusText = demoReportSource === 'loaded'
+      ? dictionary.executiveReport.demoStatus.loaded
+      : dictionary.executiveReport.demoStatus.fallback;
+
+    setText('[data-demo-status]', statusText);
+    setText('[data-demo-release-decision]', decisionText);
+    setText(
+      '[data-demo-release-reason]',
+      getDecisionReason(currentLang, stats.releaseDecision, highestSeverityLabel.toLowerCase()),
+    );
+
+    setText('[data-demo-score-overall]', confidenceText);
+    setText(
+      '[data-demo-score-stability]',
+      `${currentLang === 'es' ? 'Estabilidad' : 'Stability'}: ${stats.confidence.stability}/100`,
+    );
+    setText(
+      '[data-demo-score-usability]',
+      `${currentLang === 'es' ? 'Usabilidad' : 'Usability'}: ${stats.confidence.usability}/100`,
+    );
+    setText(
+      '[data-demo-score-readiness]',
+      `${currentLang === 'es' ? 'Release readiness' : 'Release readiness'}: ${stats.confidence.readiness}/100`,
+    );
+
+    const topIssueSeverity = getLocalizedLabel(dictionary, 'severity', stats.topIssue.severity).toLowerCase();
+    const topIssueResult = getLocalizedLabel(dictionary, 'result', stats.topIssue.result).toLowerCase();
+    const topIssueFeedback = stats.topIssue.feedbackText || (currentLang === 'es'
+      ? 'Sin detalle de feedback disponible.'
+      : 'No feedback detail available.');
+    setText(
+      '[data-demo-top-issue]',
+      `[${stats.topIssue.userId}] (${topIssueSeverity} / ${topIssueResult}) ${topIssueFeedback}`,
+    );
+
+    const screenName = stats.mostAffectedScreen;
+    setText(
+      '[data-demo-plan-short-1]',
+      currentLang === 'es'
+        ? `P1: Reducir severidad ${highestSeverityLabel.toLowerCase()} en flujo principal (${screenName}).`
+        : `P1: Reduce ${highestSeverityLabel.toLowerCase()} severity in the main flow (${screenName}).`,
+    );
+    setText(
+      '[data-demo-plan-short-2]',
+      currentLang === 'es'
+        ? 'P2: Estabilizar pantalla mas reportada con escenarios guiados.'
+        : 'P2: Stabilize the most reported screen with guided scenarios.',
+    );
+    setText(
+      '[data-demo-plan-short-3]',
+      currentLang === 'es'
+        ? 'P3: Mitigar impacto de uso con mejoras de UX y feedback de error.'
+        : 'P3: Mitigate usage impact with UX and error-feedback improvements.',
+    );
+    setText(
+      '[data-demo-plan-short-4]',
+      currentLang === 'es'
+        ? 'P4: Cerrar bloqueadores de release con responsables y ETA.'
+        : 'P4: Close release blockers with owners and ETA.',
+    );
+    setText(
+      '[data-demo-plan-short-5]',
+      currentLang === 'es'
+        ? 'P5: Resolver observaciones UX destacadas en estado de publicacion.'
+        : 'P5: Resolve highlighted UX observations in publish flow state.',
+    );
+
+    setText('[data-demo-severity-critical]', String(stats.severity.critical));
+    setText('[data-demo-severity-high]', String(stats.severity.high));
+    setText('[data-demo-severity-medium]', String(stats.severity.medium));
+    setText('[data-demo-severity-low]', String(stats.severity.low));
+    setBar('[data-demo-bar-severity-critical]', stats.severity.critical, total);
+    setBar('[data-demo-bar-severity-high]', stats.severity.high, total);
+    setBar('[data-demo-bar-severity-medium]', stats.severity.medium, total);
+    setBar('[data-demo-bar-severity-low]', stats.severity.low, total);
+
+    setText('[data-demo-result-workedwell]', String(stats.result.workedWell));
+    setText('[data-demo-result-worked]', String(stats.result.worked));
+    setText('[data-demo-result-needsimprovements]', String(stats.result.needsImprovements));
+    setText('[data-demo-result-didntwork]', String(stats.result.didntWork));
+    setBar('[data-demo-bar-result-workedwell]', stats.result.workedWell, total);
+    setBar('[data-demo-bar-result-worked]', stats.result.worked, total);
+    setBar('[data-demo-bar-result-needsimprovements]', stats.result.needsImprovements, total);
+    setBar('[data-demo-bar-result-didntwork]', stats.result.didntWork, total);
+
+    setText('[data-demo-publish-yes]', String(stats.publish.yes));
+    setText('[data-demo-publish-notyet]', String(stats.publish.notYet));
+    setText('[data-demo-publish-no]', String(stats.publish.no));
+    setBar('[data-demo-bar-publish-yes]', stats.publish.yes, total);
+    setBar('[data-demo-bar-publish-notyet]', stats.publish.notYet, total);
+    setBar('[data-demo-bar-publish-no]', stats.publish.no, total);
+
+    const totalLabel = currentLang === 'es'
+      ? `Total analizado: ${total} reportes`
+      : `Total analyzed: ${total} reports`;
+    setText('[data-i18n="executiveReport.metrics.severity.total"]', totalLabel);
+    setText('[data-i18n="executiveReport.metrics.result.total"]', totalLabel);
+    setText('[data-i18n="executiveReport.metrics.publish.total"]', totalLabel);
+
+    setText('[data-demo-summary-total]', String(total));
+    setText('[data-demo-summary-screen]', screenName);
+    setText('[data-demo-summary-severity]', highestSeverityLabel);
+    setText('[data-demo-summary-decision]', decisionText);
+    setText('[data-demo-summary-score]', confidenceText);
+
+    const promptLines = currentLang === 'es'
+      ? [
+          'Actua como un ingeniero senior corrigiendo una app Flutter basada en feedback beta real.',
+          '',
+          `Decision de publicacion: ${decisionText}`,
+          `Beta Confidence Score: ${confidenceText}`,
+          '',
+          'Prioridades del plan 48h:',
+          `- P1: Reducir severidad ${highestSeverityLabel.toLowerCase()} en ${screenName}.`,
+          '- P2: Estabilizar pantalla mas reportada.',
+          '- P3: Mitigar impacto de uso.',
+          '- P4: Cerrar brechas de release.',
+          '- P5: Resolver observaciones UX destacadas.',
+          '',
+          'Restricciones obligatorias:',
+          '- No hacer refactor general.',
+          '- Corregir por orden de prioridad 48h.',
+          '- Mantener compatibilidad hacia atras.',
+          '- Ejecutar analyze y tests al final.',
+        ]
+      : [
+          'Act as a senior engineer fixing a Flutter app using real beta feedback.',
+          '',
+          `Release Decision: ${decisionText}`,
+          `Beta Confidence Score: ${confidenceText}`,
+          '',
+          '48h plan priorities:',
+          `- P1: Reduce ${highestSeverityLabel.toLowerCase()} severity in ${screenName}.`,
+          '- P2: Stabilize the most reported screen.',
+          '- P3: Mitigate usage impact.',
+          '- P4: Close release decision gaps.',
+          '- P5: Address highlighted UX observations.',
+          '',
+          'Mandatory constraints:',
+          '- Do not do a general refactor.',
+          '- Fix by 48h priority order.',
+          '- Keep backwards compatibility.',
+          '- Run analyze and tests at the end.',
+        ];
+    setText('[data-demo-prompt-text]', promptLines.join('\n'));
+  }
+
+  async function loadDemoReport() {
+    try {
+      const response = await fetch('demo/beta_reports.json', { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const reports = await response.json();
+      demoReportStats = computeDemoStats(reports);
+      demoReportSource = 'loaded';
+    } catch (_) {
+      demoReportStats = { ...fallbackDemoStats };
+      demoReportSource = 'fallback';
+    }
+
+    renderDemoReport();
+  }
+
   function applyLanguage(lang) {
     const dictionary = translations[lang] || translations.en;
     currentLang = lang;
@@ -1067,6 +1540,7 @@
     });
 
     syncAiPromptViewerState();
+    renderDemoReport();
 
     localStorage.setItem(STORAGE_KEY, lang);
   }
@@ -1279,4 +1753,5 @@
   setupFaqAccordion();
   setupActionPlanAccordion();
   setupAiPromptViewer();
+  loadDemoReport();
 })();
