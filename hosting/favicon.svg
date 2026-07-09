@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BetaTest Flow mark">
+  <rect x="0" y="0" width="512" height="512" rx="112" fill="#0F3D5E"/>
+  <path d="M128 350 Q92 350 92 314 L92 184 Q92 144 132 144 L344 144" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M320 112 L376 144 L320 176" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M384 164 Q420 164 420 200 L420 328 Q420 368 380 368 L168 368" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M192 400 L136 368 L192 336" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="376" cy="368" r="28" fill="#F97316"/>
+</svg>

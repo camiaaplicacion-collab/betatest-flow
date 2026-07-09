@@ -1,12 +1,13 @@
 :root {
-  --bg: #f4f7fc;
-  --surface: #ffffff;
-  --text: #172033;
-  --muted: #4b5672;
-  --accent: #2d5ee6;
-  --accent-2: #5e4bd8;
-  --border: #dbe3f2;
-  --shadow: 0 10px 28px rgba(32, 56, 117, 0.09);
+  --bg: #0f3d5e;
+  --surface: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --muted: #d6e2ea;
+  --accent: #f97316;
+  --accent-soft: rgba(249, 115, 22, 0.2);
+  --accent-strong: #f97316;
+  --border: rgba(214, 226, 234, 0.28);
+  --shadow: 0 14px 30px rgba(3, 16, 26, 0.36);
 }
 
 * {
@@ -20,35 +21,65 @@ body {
 }
 
 body {
-  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
   color: var(--text);
-  background: linear-gradient(180deg, #eef3ff 0%, var(--bg) 34%, var(--bg) 100%);
+  background: radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.09) 0, transparent 40%),
+    radial-gradient(circle at 88% 14%, rgba(249, 115, 22, 0.18) 0, transparent 36%),
+    linear-gradient(180deg, #13486d 0%, var(--bg) 28%, #0a2f49 100%);
   line-height: 1.6;
+  position: relative;
+  min-height: 100vh;
+}
+
+.bg-orb {
+  position: fixed;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+}
+
+.bg-orb--left {
+  top: 14vh;
+  left: -110px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.bg-orb--right {
+  top: 50vh;
+  right: -100px;
+  background: rgba(249, 115, 22, 0.35);
 }
 
 .container {
   width: min(100% - 2rem, 980px);
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 4.5rem 0 3rem;
+  padding: 4.8rem 0 3.2rem;
   border-bottom: 1px solid var(--border);
 }
 
 .hero__gradient {
   position: absolute;
-  inset: -120px -10% auto;
-  height: 260px;
-  background: radial-gradient(circle at 30% 50%, rgba(45, 94, 230, 0.26), transparent 60%),
-    radial-gradient(circle at 70% 30%, rgba(94, 75, 216, 0.2), transparent 55%);
+  inset: -150px -12% auto;
+  height: 310px;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.16), transparent 62%),
+    radial-gradient(circle at 75% 30%, rgba(249, 115, 22, 0.22), transparent 56%);
   pointer-events: none;
 }
 
 .hero__content {
   position: relative;
+  animation: fade-up 0.7s ease both;
 }
 
 .badge {
@@ -56,9 +87,9 @@ body {
   margin: 0 0 1rem;
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
-  border: 1px solid rgba(45, 94, 230, 0.25);
-  background: rgba(45, 94, 230, 0.1);
-  color: #1f47b5;
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  background: rgba(249, 115, 22, 0.15);
+  color: #ffd8bd;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -67,8 +98,24 @@ body {
 
 h1 {
   margin: 0;
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
   letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.36rem;
+}
+
+.brand-betatest {
+  color: #ffffff;
+}
+
+.brand-flow {
+  color: var(--accent);
 }
 
 .lead {
@@ -76,6 +123,45 @@ h1 {
   max-width: 62ch;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  font-size: 0.96rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #251206;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.35);
+}
+
+.btn--primary:hover {
+  background: #fb8b3d;
+}
+
+.btn--ghost {
+  color: #fff0e4;
+  border: 1px solid rgba(249, 115, 22, 0.42);
+  background: rgba(15, 61, 94, 0.4);
 }
 
 main {
@@ -92,12 +178,22 @@ main {
   border-radius: 14px;
   padding: 1.2rem 1.2rem;
   box-shadow: var(--shadow);
+  backdrop-filter: blur(3px);
+  animation: fade-up 0.6s ease both;
 }
 
 h2 {
   margin: 0 0 0.75rem;
-  color: #172851;
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  color: #ffffff;
   font-size: clamp(1.25rem, 2vw, 1.45rem);
+}
+
+h3 {
+  margin: 0 0 0.3rem;
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  font-size: 1.04rem;
+  color: #ffd9c0;
 }
 
 p {
@@ -109,20 +205,80 @@ ul {
   padding-left: 1.2rem;
 }
 
+ol {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
 li {
   margin: 0.4rem 0;
 }
 
+.steps li::marker {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.metric-card {
+  border: 1px solid rgba(214, 226, 234, 0.24);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+pre {
+  margin: 0.95rem 0 0;
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(214, 226, 234, 0.3);
+  background: #08273d;
+  color: #e8f4fb;
+  overflow-x: auto;
+}
+
+code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.88rem;
+}
+
+.roadmap-list strong {
+  color: var(--accent);
+}
+
+.cta-card {
+  display: grid;
+  gap: 0.9rem;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.14) 0%, rgba(249, 115, 22, 0.13) 100%);
+}
+
 .footer {
   border-top: 1px solid var(--border);
-  background: #edf2ff;
+  background: rgba(6, 28, 44, 0.72);
   padding: 1rem 0 1.2rem;
 }
 
 .footer p {
   margin: 0;
-  color: #324366;
+  color: var(--muted);
   font-weight: 600;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 740px) {
@@ -132,5 +288,19 @@ li {
 
   .section {
     margin-top: 1.25rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding-top: 4.2rem;
+  }
+
+  .btn {
+    width: 100%;
   }
 }
