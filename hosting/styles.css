@@ -985,6 +985,69 @@ li {
   gap: 0.6rem;
 }
 
+.integration-guide {
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.12) 0%, rgba(249, 115, 22, 0.11) 100%);
+}
+
+.integration-steps {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.integration-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.72rem;
+}
+
+.integration-step__number {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(249, 115, 22, 0.58);
+  background: rgba(249, 115, 22, 0.18);
+  color: #ffd8bd;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.38rem;
+}
+
+.integration-step__content {
+  border: 1px solid rgba(214, 226, 234, 0.24);
+  border-radius: 12px;
+  background: rgba(8, 39, 61, 0.5);
+  padding: 0.88rem;
+}
+
+.integration-step__content h3 {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+}
+
+.integration-step__content p {
+  margin-top: 0.38rem;
+  color: var(--muted);
+}
+
+.integration-step__copy {
+  margin-top: 0.62rem;
+  min-width: 112px;
+}
+
+.integration-step__expected {
+  margin-top: 0.6rem;
+}
+
+.integration-step__expected strong {
+  color: #ffffff;
+}
+
 .live-report-explorer {
   margin-top: 1rem;
 }
@@ -1185,6 +1248,14 @@ code {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  .integration-step {
+    gap: 0.88rem;
+  }
+
+  .integration-step__content {
+    padding: 0.95rem;
+  }
+
   .timeline-step:not(:last-child)::after {
     content: '';
     position: absolute;
@@ -1228,6 +1299,14 @@ code {
 
   .hero {
     padding-top: 3.4rem;
+  }
+
+  .integration-step {
+    grid-template-columns: 1fr;
+  }
+
+  .integration-step__number {
+    margin-top: 0;
   }
 
   .report-item__meta {

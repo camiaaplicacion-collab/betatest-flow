@@ -28,6 +28,7 @@
 
         <nav class="top-nav__links" aria-label="Primary">
           <a class="top-nav__link" href="#top" data-i18n="nav.home">Home</a>
+          <a class="top-nav__link" href="#integration-guide" data-i18n="nav.integrate">Integrate</a>
           <a class="top-nav__link" href="#documentation" data-i18n="nav.documentation">Documentation</a>
           <a class="top-nav__link" href="#executive-report" data-i18n="nav.demo">Demo</a>
           <a class="top-nav__link" href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
@@ -156,6 +157,96 @@ flutter pub get</code></pre>
         <pre><code>dart run tools/export_beta_reports.dart \
   --input-json example/data/sample_beta_reports.json \
   --out-dir exports/demo</code></pre>
+      </section>
+
+      <section id="integration-guide" class="section container card integration-guide">
+        <h2 data-i18n="integrationGuide.title">Integration Guide</h2>
+        <p data-i18n="integrationGuide.intro">Follow these 7 steps to install and integrate BetaTest Flow end to end.</p>
+
+        <div class="integration-steps">
+          <article class="integration-step">
+            <span class="integration-step__number">1</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step1.title">Install the SDK</h3>
+              <p data-i18n="integrationGuide.step1.description">Add BetaTest Flow as a local dependency in your Flutter project.</p>
+              <pre><code data-integration-code>dependencies:
+  betatest_flow:
+    path: ./betatest_flow</code></pre>
+              <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step1.expected">The dependency is resolved and ready to import.</span></p>
+            </div>
+          </article>
+
+          <article class="integration-step">
+            <span class="integration-step__number">2</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step2.title">Import the package</h3>
+              <p data-i18n="integrationGuide.step2.description">Import BetaTest Flow in the file where you will configure the SDK.</p>
+              <pre><code data-integration-code>import 'package:betatest_flow/betatest_flow.dart';</code></pre>
+              <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step2.expected">You can access BetaTest Flow classes from your app code.</span></p>
+            </div>
+          </article>
+
+          <article class="integration-step">
+            <span class="integration-step__number">3</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step3.title">Create the config</h3>
+              <p data-i18n="integrationGuide.step3.description">Define app, campaign and user context for report attribution.</p>
+              <pre><code data-integration-code>final config = BetaTestFlowConfig(
+  appId: 'my_flutter_app',
+  campaignId: 'closed_beta_1',
+  userId: currentUserId,
+);</code></pre>
+              <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step3.expected">Configuration object is ready to be injected into UI components.</span></p>
+            </div>
+          </article>
+
+          <article class="integration-step">
+            <span class="integration-step__number">4</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step4.title">Add the feedback button</h3>
+              <p data-i18n="integrationGuide.step4.description">Render the SDK button so testers can submit structured feedback.</p>
+              <pre><code data-integration-code>BetaFeedbackButton(
+  config: config,
+)</code></pre>
+              <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step4.expected">Feedback entry point is visible in your app UI.</span></p>
+            </div>
+          </article>
+
+          <article class="integration-step">
+            <span class="integration-step__number">5</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step5.title">Send your first beta report</h3>
+              <p data-i18n="integrationGuide.step5.description">Run your app, open the feedback button and submit a structured report.</p>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step5.expected">One report is generated with severity, result and recommendation fields.</span></p>
+            </div>
+          </article>
+
+          <article class="integration-step">
+            <span class="integration-step__number">6</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step6.title">Export reports</h3>
+              <p data-i18n="integrationGuide.step6.description">Generate demo outputs from the official sample fixture.</p>
+              <pre><code data-integration-code>dart run tools/export_beta_reports.dart \
+  --input-json example/data/sample_beta_reports.json \
+  --out-dir exports/demo</code></pre>
+              <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step6.expected">JSON, CSV and Markdown reports are generated under exports/demo.</span></p>
+            </div>
+          </article>
+
+          <article class="integration-step">
+            <span class="integration-step__number">7</span>
+            <div class="integration-step__content">
+              <h3 data-i18n="integrationGuide.step7.title">Use the AI prompt</h3>
+              <p data-i18n="integrationGuide.step7.description">Open exports/demo/beta_summary.md and copy the AI Correction Prompt into Copilot, Cursor, ChatGPT or Gemini.</p>
+              <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step7.expected">You have a ready-to-run prompt grounded in real beta evidence.</span></p>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section id="documentation" class="section container card">

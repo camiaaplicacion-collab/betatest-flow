@@ -18,6 +18,7 @@
       },
       nav: {
         home: 'Home',
+        integrate: 'Integrate',
         documentation: 'Documentation',
         demo: 'Demo',
         roadmap: 'Roadmap',
@@ -90,6 +91,61 @@
       offline: {
         title: 'Offline demo',
         body: "Generate reports without Firestore by using the project's official fixture.",
+      },
+      integrationGuide: {
+        title: 'Integration Guide',
+        intro:
+          'Follow these 7 steps to install and integrate BetaTest Flow end to end.',
+        expectedLabel: 'Expected:',
+        copyButton: 'Copy code',
+        copied: 'Copied',
+        step1: {
+          title: 'Install the SDK',
+          description:
+            'Add BetaTest Flow as a local dependency in your Flutter project.',
+          expected: 'The dependency is resolved and ready to import.',
+        },
+        step2: {
+          title: 'Import the package',
+          description:
+            'Import BetaTest Flow in the file where you will configure the SDK.',
+          expected:
+            'You can access BetaTest Flow classes from your app code.',
+        },
+        step3: {
+          title: 'Create the config',
+          description:
+            'Define app, campaign and user context for report attribution.',
+          expected:
+            'Configuration object is ready to be injected into UI components.',
+        },
+        step4: {
+          title: 'Add the feedback button',
+          description:
+            'Render the SDK button so testers can submit structured feedback.',
+          expected: 'Feedback entry point is visible in your app UI.',
+        },
+        step5: {
+          title: 'Send your first beta report',
+          description:
+            'Run your app, open the feedback button and submit a structured report.',
+          expected:
+            'One report is generated with severity, result and recommendation fields.',
+        },
+        step6: {
+          title: 'Export reports',
+          description:
+            'Generate demo outputs from the official sample fixture.',
+          expected:
+            'JSON, CSV and Markdown reports are generated under exports/demo.',
+        },
+        step7: {
+          title: 'Use the AI prompt',
+          description:
+            'Open exports/demo/beta_summary.md and copy the AI Correction Prompt into Copilot, Cursor, ChatGPT or Gemini.',
+          expected:
+            'You have a ready-to-run prompt grounded in real beta evidence.',
+        },
       },
       documentation: {
         title: 'Documentation',
@@ -556,6 +612,7 @@
       },
       nav: {
         home: 'Inicio',
+        integrate: 'Integrar',
         documentation: 'Documentacion',
         demo: 'Demo',
         roadmap: 'Roadmap',
@@ -628,6 +685,61 @@
       offline: {
         title: 'Demo offline',
         body: 'Genera reportes sin depender de Firestore usando el fixture oficial del proyecto.',
+      },
+      integrationGuide: {
+        title: 'Guia de integracion',
+        intro:
+          'Sigue estos 7 pasos para instalar e integrar BetaTest Flow de punta a punta.',
+        expectedLabel: 'Resultado esperado:',
+        copyButton: 'Copiar codigo',
+        copied: 'Copiado',
+        step1: {
+          title: 'Instalar el SDK',
+          description:
+            'Agrega BetaTest Flow como dependencia local en tu proyecto Flutter.',
+          expected: 'La dependencia queda resuelta y lista para importar.',
+        },
+        step2: {
+          title: 'Importar el paquete',
+          description:
+            'Importa BetaTest Flow en el archivo donde configuraras el SDK.',
+          expected:
+            'Ya puedes acceder a las clases de BetaTest Flow desde tu app.',
+        },
+        step3: {
+          title: 'Crear la configuracion',
+          description:
+            'Define app, campana y usuario para atribuir correctamente los reportes.',
+          expected:
+            'El objeto de configuracion queda listo para inyectarse en UI.',
+        },
+        step4: {
+          title: 'Agregar el boton de feedback',
+          description:
+            'Renderiza el boton del SDK para que testers envien feedback estructurado.',
+          expected: 'El punto de entrada de feedback ya es visible en la app.',
+        },
+        step5: {
+          title: 'Enviar tu primer reporte beta',
+          description:
+            'Ejecuta tu app, abre el boton de feedback y envia un reporte estructurado.',
+          expected:
+            'Se genera un reporte con severidad, resultado y recomendacion.',
+        },
+        step6: {
+          title: 'Exportar reportes',
+          description:
+            'Genera salidas demo usando el fixture oficial de ejemplo.',
+          expected:
+            'Se generan reportes JSON, CSV y Markdown en exports/demo.',
+        },
+        step7: {
+          title: 'Usar el prompt IA',
+          description:
+            'Abre exports/demo/beta_summary.md y copia el AI Correction Prompt en Copilot, Cursor, ChatGPT o Gemini.',
+          expected:
+            'Tienes un prompt listo para ejecutar, basado en evidencia real beta.',
+        },
       },
       documentation: {
         title: 'Documentacion',
@@ -1965,6 +2077,39 @@
     syncAiPromptViewerState();
   }
 
+  function setupIntegrationGuideCopy() {
+    const buttons = Array.from(document.querySelectorAll('[data-copy-integration-code]'));
+    if (buttons.length === 0) {
+      return;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', async () => {
+        const code = button.parentElement
+          ? button.parentElement.querySelector('[data-integration-code]')
+          : null;
+        if (!code) {
+          return;
+        }
+
+        const copied = await copyToClipboard(code.textContent || '');
+        if (!copied) {
+          return;
+        }
+
+        const dictionary = translations[currentLang] || translations.en;
+        button.textContent = dictionary.integrationGuide.copied;
+        button.classList.add('is-success');
+
+        window.setTimeout(() => {
+          const fallbackDictionary = translations[currentLang] || translations.en;
+          button.textContent = fallbackDictionary.integrationGuide.copyButton;
+          button.classList.remove('is-success');
+        }, 1400);
+      });
+    });
+  }
+
   const stored = localStorage.getItem(STORAGE_KEY);
   const initialLang = stored === 'es' ? 'es' : 'en';
   applyLanguage(initialLang);
@@ -1987,6 +2132,7 @@
   setupFaqAccordion();
   setupActionPlanAccordion();
   setupAiPromptViewer();
+  setupIntegrationGuideCopy();
   setupLiveReportExplorer();
   loadDemoReport();
 })();
