@@ -27,6 +27,10 @@
       shared: {
         getAiPromptCta: 'Get AI Fix Prompt',
       },
+      a11y: {
+        expanded: 'expanded',
+        collapsed: 'collapsed',
+      },
       share: {
         hero: 'Share',
         cta: 'Share BetaTest Flow',
@@ -620,6 +624,10 @@
       },
       shared: {
         getAiPromptCta: 'Obtener prompt IA',
+      },
+      a11y: {
+        expanded: 'expandido',
+        collapsed: 'contraido',
       },
       share: {
         hero: 'Compartir',
@@ -1663,6 +1671,9 @@
       trigger.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
       trigger.setAttribute('aria-label', nextExpanded ? copy.collapse : copy.expand);
       panel.hidden = !nextExpanded;
+
+      const stateText = nextExpanded ? dictionary.a11y.expanded : dictionary.a11y.collapsed;
+      announceToScreenReader(`${copy.title} ${stateText}`);
     });
   }
 
@@ -1895,6 +1906,35 @@
     return translations[currentLang] || translations.en;
   }
 
+  function announceToScreenReader(message) {
+    const region = document.getElementById('a11y-live-region');
+    if (!region || !message) {
+      return;
+    }
+
+    region.textContent = '';
+    window.setTimeout(() => {
+      region.textContent = message;
+    }, 30);
+  }
+
+  function updateTopNavCurrentLink() {
+    const links = Array.from(document.querySelectorAll('.top-nav__link[href^="#"]'));
+    if (links.length === 0) {
+      return;
+    }
+
+    const activeHash = window.location.hash || '#top';
+    links.forEach((link) => {
+      const isActive = link.getAttribute('href') === activeHash;
+      if (isActive) {
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  }
+
   async function copyToClipboard(text) {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1933,6 +1973,8 @@
       button.textContent = typeof translated === 'string' ? translated : original;
       button.classList.remove('is-success');
     }, 1400);
+
+    announceToScreenReader(text);
   }
 
   async function handleShareClick(button) {
@@ -1989,7 +2031,12 @@
             setFaqState(otherButton, false);
           }
         });
-        setFaqState(button, !isExpanded);
+        const nextExpanded = !isExpanded;
+        setFaqState(button, nextExpanded);
+
+        const dictionary = translations[currentLang] || translations.en;
+        const stateText = nextExpanded ? dictionary.a11y.expanded : dictionary.a11y.collapsed;
+        announceToScreenReader(`${button.textContent.trim()} ${stateText}`);
       });
     });
   }
@@ -2020,7 +2067,12 @@
             setActionPlanState(otherButton, false);
           }
         });
-        setActionPlanState(button, !isExpanded);
+        const nextExpanded = !isExpanded;
+        setActionPlanState(button, nextExpanded);
+
+        const dictionary = translations[currentLang] || translations.en;
+        const stateText = nextExpanded ? dictionary.a11y.expanded : dictionary.a11y.collapsed;
+        announceToScreenReader(`${button.textContent.trim()} ${stateText}`);
       });
     });
   }
@@ -2054,6 +2106,10 @@
       toggleButton.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
       preview.classList.toggle('is-collapsed', !nextExpanded);
       syncAiPromptViewerState();
+
+      const dictionary = translations[currentLang] || translations.en;
+      const stateText = nextExpanded ? dictionary.a11y.expanded : dictionary.a11y.collapsed;
+      announceToScreenReader(`${dictionary.executiveReport.promptViewer.title} ${stateText}`);
     });
 
     copyButton.addEventListener('click', async () => {
@@ -2065,6 +2121,7 @@
 
       copyButton.textContent = dictionary.executiveReport.promptViewer.copied;
       copyButton.classList.add('is-success');
+      announceToScreenReader(dictionary.executiveReport.promptViewer.copied);
       window.setTimeout(() => {
         const fallbackDictionary = translations[currentLang] || translations.en;
         copyButton.textContent = fallbackDictionary.executiveReport.promptViewer.copy;
@@ -2100,6 +2157,7 @@
         const dictionary = translations[currentLang] || translations.en;
         button.textContent = dictionary.integrationGuide.copied;
         button.classList.add('is-success');
+        announceToScreenReader(dictionary.integrationGuide.copied);
 
         window.setTimeout(() => {
           const fallbackDictionary = translations[currentLang] || translations.en;
@@ -2129,10 +2187,13 @@
     });
   });
 
+  window.addEventListener('hashchange', updateTopNavCurrentLink);
+
   setupFaqAccordion();
   setupActionPlanAccordion();
   setupAiPromptViewer();
   setupIntegrationGuideCopy();
   setupLiveReportExplorer();
+  updateTopNavCurrentLink();
   loadDemoReport();
 })();

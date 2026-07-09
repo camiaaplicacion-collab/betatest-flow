@@ -3,8 +3,29 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta id="meta-description" name="description" content="BetaTest Flow: Flutter Beta Testing SDK to capture real feedback and ship with confidence.">
     <title>BetaTest Flow | Flutter Beta Testing SDK</title>
+    <meta id="meta-description" name="description" content="Collect structured beta feedback, generate executive reports and AI-powered fix prompts for Flutter applications.">
+    <meta name="keywords" content="Flutter, Beta Testing, SDK, QA, Feedback, Firebase, Executive Report, AI Prompt">
+    <meta name="author" content="BetaTest Flow">
+    <meta name="theme-color" content="#0F3D5E">
+    <meta name="color-scheme" content="dark light">
+    <link rel="canonical" href="https://YOUR_DOMAIN/">
+    <link rel="alternate" hreflang="en" href="https://YOUR_DOMAIN/">
+    <link rel="alternate" hreflang="es" href="https://YOUR_DOMAIN/?lang=es">
+
+    <meta property="og:title" content="BetaTest Flow">
+    <meta property="og:description" content="Flutter Beta Testing SDK">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="/images/social-preview.png">
+    <meta property="og:url" content="https://YOUR_DOMAIN/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BetaTest Flow">
+    <meta name="twitter:description" content="Flutter Beta Testing SDK">
+    <meta name="twitter:image" content="/images/social-preview.png">
+
+    <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -12,12 +33,14 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="styles.css" as="style">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body id="top">
     <div class="bg-orb bg-orb--left" aria-hidden="true"></div>
     <div class="bg-orb bg-orb--right" aria-hidden="true"></div>
+    <div id="a11y-live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <header class="top-nav">
       <div class="container top-nav__inner">
@@ -616,7 +639,7 @@ BetaFeedbackButton(
         <h2 data-i18n="executiveReport.title">Executive Report Dashboard (Demo)</h2>
         <p data-i18n="executiveReport.intro">Live demo values generated from the official fixture sample_beta_reports.json.</p>
         <p class="executive-source" data-i18n="executiveReport.source">Source fixture: example/data/sample_beta_reports.json (3 reports)</p>
-        <p class="executive-demo-status" data-demo-status data-i18n="executiveReport.demoStatus.loaded">Demo data loaded from beta_reports.json</p>
+        <p class="executive-demo-status" data-demo-status aria-live="polite" data-i18n="executiveReport.demoStatus.loaded">Demo data loaded from beta_reports.json</p>
 
         <div class="executive-grid">
           <article class="executive-card">
@@ -876,11 +899,11 @@ Priority: P1 Publish flow high severity, then P2-P5 in 48h.</code></pre>
           <p data-i18n="executiveReport.promptViewer.description">Review the correction prompt before copying it into your AI coding assistant.</p>
 
           <div class="ai-prompt-viewer__actions">
-            <button class="btn btn--ghost ai-prompt-viewer__btn" type="button" data-ai-prompt-toggle aria-expanded="false" data-i18n="executiveReport.promptViewer.expand">Expand prompt</button>
+            <button class="btn btn--ghost ai-prompt-viewer__btn" type="button" data-ai-prompt-toggle aria-expanded="false" aria-controls="ai-prompt-preview" data-i18n="executiveReport.promptViewer.expand">Expand prompt</button>
             <button class="btn btn--ghost ai-prompt-viewer__btn" type="button" data-ai-prompt-copy data-i18n="executiveReport.promptViewer.copy">Copy Prompt</button>
           </div>
 
-          <pre class="ai-prompt-viewer__preview is-collapsed" data-ai-prompt-preview><code data-demo-prompt-text data-i18n="executiveReport.promptViewer.promptText">Act as a senior engineer fixing a Flutter app using real beta feedback.
+          <pre class="ai-prompt-viewer__preview is-collapsed" id="ai-prompt-preview" data-ai-prompt-preview><code data-demo-prompt-text data-i18n="executiveReport.promptViewer.promptText">Act as a senior engineer fixing a Flutter app using real beta feedback.
 
 Release Decision: GO WITH CONDITIONS
 Beta Confidence Score: 65/100 (Medium confidence)
