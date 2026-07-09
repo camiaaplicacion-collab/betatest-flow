@@ -487,6 +487,26 @@
               'Executive Report with decision, score, action plan and AI prompt.',
           },
         },
+        liveReportExplorer: {
+          title: 'Live Report Explorer',
+          intro:
+            'Inspect the individual reports behind the Executive Report.',
+          noReports: 'No reports available for this demo.',
+          labels: {
+            tester: 'Tester',
+            screen: 'Screen',
+            severity: 'Severity',
+            result: 'Result',
+            publishRecommendation: 'Publish Recommendation',
+            feedback: 'Feedback',
+            steps: 'Steps to Reproduce',
+            suggestion: 'Suggestion',
+            uxDetails: 'UX Details',
+            markdownPreview: 'Markdown Preview',
+          },
+          expand: 'Expand report',
+          collapse: 'Collapse report',
+        },
       },
       status: {
         title: 'SDK Status',
@@ -1008,6 +1028,26 @@
               'Executive Report con decision, score, plan de accion y prompt IA.',
           },
         },
+        liveReportExplorer: {
+          title: 'Explorador de reportes en vivo',
+          intro:
+            'Inspecciona los reportes individuales detras del Executive Report.',
+          noReports: 'No hay reportes disponibles para esta demo.',
+          labels: {
+            tester: 'Tester',
+            screen: 'Pantalla',
+            severity: 'Severidad',
+            result: 'Resultado',
+            publishRecommendation: 'Recomendacion de publicacion',
+            feedback: 'Feedback',
+            steps: 'Pasos para reproducir',
+            suggestion: 'Sugerencia',
+            uxDetails: 'Detalles UX',
+            markdownPreview: 'Vista previa markdown',
+          },
+          expand: 'Expandir reporte',
+          collapse: 'Contraer reporte',
+        },
       },
       status: {
         title: 'Estado del SDK',
@@ -1066,7 +1106,61 @@
     },
   };
 
+  const fallbackDemoReports = [
+    {
+      userId: 'tester_001',
+      email: 'qa1@buskia.com',
+      screenName: 'PublishAlertScreen',
+      severity: 'alta',
+      result: 'no_funciono',
+      publishRecommendation: 'No todavia',
+      feedbackText:
+        'El boton de publicar se queda cargando y no completa la accion.',
+      stepsToReproduce:
+        '1. Iniciar sesion. 2. Ir a Publicar alerta. 3. Completar formulario. 4. Presionar Publicar.',
+      suggestion:
+        'Mostrar mensaje de error con causa y habilitar reintento automatico.',
+      uxDetails:
+        'El flujo no indica claramente si el envio fallo o sigue en progreso.',
+      markdownReport: '# Reporte\n- Problema al publicar alerta\n- Severidad alta',
+    },
+    {
+      userId: 'tester_002',
+      email: 'qa2@buskia.com',
+      screenName: 'HomeScreen',
+      severity: 'media',
+      result: 'funciono_a_medias',
+      publishRecommendation: 'Si, con ajustes menores',
+      feedbackText:
+        'La pantalla principal carga, pero los filtros tardan demasiado en aplicar.',
+      stepsToReproduce:
+        '1. Abrir app. 2. Entrar a Home. 3. Cambiar filtro por categoria.',
+      suggestion: 'Cachear resultados iniciales y reducir consultas duplicadas.',
+      uxDetails:
+        'El indicador de carga ayuda, pero no muestra tiempo estimado.',
+      markdownReport: '# Reporte\n- Lentitud en filtros\n- Impacto medio',
+    },
+    {
+      userId: 'tester_003',
+      email: 'qa3@buskia.com',
+      screenName: 'AuthScreen',
+      severity: 'baja',
+      result: 'funciono',
+      publishRecommendation: 'Si',
+      feedbackText:
+        'Registro y login correctos; sugerencia menor en textos de ayuda.',
+      stepsToReproduce:
+        '1. Crear cuenta nueva. 2. Confirmar correo. 3. Iniciar sesion.',
+      suggestion:
+        'Simplificar el texto del tooltip en campo de contrasena.',
+      uxDetails: 'El flujo es claro y rapido en dispositivos actuales.',
+      markdownReport:
+        '# Reporte\n- Flujo de autenticacion estable\n- Ajuste menor recomendado',
+    },
+  ];
+
   let demoReportStats = null;
+  let demoReportItems = [];
   let demoReportSource = 'fallback';
 
   function setText(selector, value) {
@@ -1328,6 +1422,138 @@
     return key;
   }
 
+  function getLocalizedPublishLabel(dictionary, publishKey) {
+    return dictionary.executiveReport.metrics.labels[publishKey] || publishKey;
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function normalizeDemoReportItem(report, index) {
+    const normalized = report || {};
+    const tester = String(normalized.userId || normalized.email || `tester_${index + 1}`);
+    const email = String(normalized.email || '').trim();
+    const screenName = String(normalized.screenName || 'N/A').trim() || 'N/A';
+    const severityKey = getSeverityKey(normalized.severity);
+    const resultKey = getResultKey(normalized.result);
+    const publishKey = getPublishKey(normalized.publishRecommendation);
+
+    return {
+      id: `report-item-${index + 1}`,
+      tester,
+      email,
+      screenName,
+      severityKey,
+      resultKey,
+      publishKey,
+      feedbackText: String(normalized.feedbackText || '').trim(),
+      stepsToReproduce: String(normalized.stepsToReproduce || '').trim(),
+      suggestion: String(normalized.suggestion || '').trim(),
+      uxDetails: String(normalized.uxDetails || '').trim(),
+      markdownReport: String(normalized.markdownReport || '').trim(),
+    };
+  }
+
+  function renderLiveReportExplorer() {
+    const container = document.querySelector('[data-report-explorer-list]');
+    if (!container) {
+      return;
+    }
+
+    const dictionary = translations[currentLang] || translations.en;
+    const copy = dictionary.executiveReport.liveReportExplorer;
+
+    if (!Array.isArray(demoReportItems) || demoReportItems.length === 0) {
+      container.innerHTML = `<article class="report-item"><p class="report-item__panel">${escapeHtml(copy.noReports)}</p></article>`;
+      return;
+    }
+
+    container.innerHTML = demoReportItems.map((item) => {
+      const severityText = getLocalizedLabel(dictionary, 'severity', item.severityKey);
+      const resultText = getLocalizedLabel(dictionary, 'result', item.resultKey);
+      const publishText = getLocalizedPublishLabel(dictionary, item.publishKey);
+
+      const feedbackText = item.feedbackText || (currentLang === 'es'
+        ? 'Sin detalle de feedback disponible.'
+        : 'No feedback detail available.');
+      const stepsText = item.stepsToReproduce || (currentLang === 'es'
+        ? 'Sin pasos disponibles.'
+        : 'No steps available.');
+      const suggestionText = item.suggestion || (currentLang === 'es'
+        ? 'Sin sugerencia disponible.'
+        : 'No suggestion available.');
+
+      const testerHeadline = item.email
+        ? `${item.tester} (${item.email})`
+        : item.tester;
+
+      const uxLine = item.uxDetails
+        ? `<p><strong>${escapeHtml(copy.labels.uxDetails)}:</strong> ${escapeHtml(item.uxDetails)}</p>`
+        : '';
+
+      const markdownLine = item.markdownReport
+        ? `<p><strong>${escapeHtml(copy.labels.markdownPreview)}:</strong></p><pre><code>${escapeHtml(item.markdownReport)}</code></pre>`
+        : '';
+
+      return `
+        <article class="report-item">
+          <h4 class="report-item__header">
+            <button class="report-item__trigger" type="button" data-report-item-trigger aria-expanded="false" aria-controls="${escapeHtml(item.id)}" aria-label="${escapeHtml(copy.expand)}">
+              <strong>${escapeHtml(copy.labels.tester)}:</strong> ${escapeHtml(testerHeadline)}
+              <div class="report-item__meta">
+                <span><strong>${escapeHtml(copy.labels.screen)}:</strong> ${escapeHtml(item.screenName)}</span>
+                <span><strong>${escapeHtml(copy.labels.severity)}:</strong> ${escapeHtml(severityText)}</span>
+                <span><strong>${escapeHtml(copy.labels.result)}:</strong> ${escapeHtml(resultText)}</span>
+                <span><strong>${escapeHtml(copy.labels.publishRecommendation)}:</strong> ${escapeHtml(publishText)}</span>
+              </div>
+            </button>
+          </h4>
+          <div class="report-item__panel" id="${escapeHtml(item.id)}" hidden>
+            <p><strong>${escapeHtml(copy.labels.publishRecommendation)}:</strong> ${escapeHtml(publishText)}</p>
+            <p><strong>${escapeHtml(copy.labels.feedback)}:</strong> ${escapeHtml(feedbackText)}</p>
+            <p><strong>${escapeHtml(copy.labels.steps)}:</strong> ${escapeHtml(stepsText)}</p>
+            <p><strong>${escapeHtml(copy.labels.suggestion)}:</strong> ${escapeHtml(suggestionText)}</p>
+            ${uxLine}
+            ${markdownLine}
+          </div>
+        </article>`;
+    }).join('');
+  }
+
+  function setupLiveReportExplorer() {
+    const container = document.querySelector('[data-report-explorer-list]');
+    if (!container) {
+      return;
+    }
+
+    container.addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-report-item-trigger]');
+      if (!trigger) {
+        return;
+      }
+
+      const panelId = trigger.getAttribute('aria-controls');
+      const panel = panelId ? document.getElementById(panelId) : null;
+      if (!panel) {
+        return;
+      }
+
+      const dictionary = translations[currentLang] || translations.en;
+      const copy = dictionary.executiveReport.liveReportExplorer;
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      const nextExpanded = !expanded;
+      trigger.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+      trigger.setAttribute('aria-label', nextExpanded ? copy.collapse : copy.expand);
+      panel.hidden = !nextExpanded;
+    });
+  }
+
   function renderDemoReport() {
     if (!demoReportStats) {
       return;
@@ -1496,13 +1722,20 @@
       }
       const reports = await response.json();
       demoReportStats = computeDemoStats(reports);
+      demoReportItems = Array.isArray(reports)
+        ? reports.map((report, index) => normalizeDemoReportItem(report, index))
+        : [];
       demoReportSource = 'loaded';
     } catch (_) {
       demoReportStats = { ...fallbackDemoStats };
+      demoReportItems = fallbackDemoReports.map((report, index) => (
+        normalizeDemoReportItem(report, index)
+      ));
       demoReportSource = 'fallback';
     }
 
     renderDemoReport();
+    renderLiveReportExplorer();
   }
 
   function applyLanguage(lang) {
@@ -1541,6 +1774,7 @@
 
     syncAiPromptViewerState();
     renderDemoReport();
+    renderLiveReportExplorer();
 
     localStorage.setItem(STORAGE_KEY, lang);
   }
@@ -1753,5 +1987,6 @@
   setupFaqAccordion();
   setupActionPlanAccordion();
   setupAiPromptViewer();
+  setupLiveReportExplorer();
   loadDemoReport();
 })();
