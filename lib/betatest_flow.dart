@@ -1,3 +1,4 @@
+export 'src/config/beta_feedback_field_config.dart';
 export 'src/config/beta_test_flow_config.dart';
 export 'src/data/repositories/firebase_beta_feedback_repository.dart';
 export 'src/domain/models/beta_checklist_item.dart';

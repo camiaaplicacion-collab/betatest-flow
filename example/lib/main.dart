@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:betatest_flow/betatest_flow.dart';
 
@@ -11,12 +12,29 @@ Future<void> main() async {
 Future<void> _initializeFirebase() async {
   try {
     await Firebase.initializeApp();
-  } on Exception catch (error) {
+  } catch (error) {
+    if (kIsWeb && _isMissingWebOptionsError(error)) {
+      await Firebase.initializeApp(options: _webDemoFirebaseOptions);
+      return;
+    }
     throw FlutterError(
       'Firebase initialization failed. Configure Firebase in example app first. Error: $error',
     );
   }
 }
+
+bool _isMissingWebOptionsError(Object error) {
+  return error.toString().contains('FirebaseOptions cannot be null');
+}
+
+const _webDemoFirebaseOptions = FirebaseOptions(
+  apiKey: 'demo-api-key',
+  appId: '1:1234567890:web:betatestflowdemo',
+  messagingSenderId: '1234567890',
+  projectId: 'betatest-flow-demo',
+  authDomain: 'betatest-flow-demo.firebaseapp.com',
+  storageBucket: 'betatest-flow-demo.appspot.com',
+);
 
 const _demoConfig = BetaTestFlowConfig(
   appId: 'demo_app',
@@ -24,6 +42,16 @@ const _demoConfig = BetaTestFlowConfig(
   campaignId: 'demo_beta_1',
   campaignName: 'Demo Beta 1',
   reportVersion: '1',
+  fieldConfig: BetaFeedbackFieldConfig(
+    showScreenName: true,
+    showReproducibility: true,
+    showUsageImpact: true,
+    showPublishRecommendation: true,
+    showUxDetails: true,
+    showInterfaceEvaluation: true,
+    showColorEvaluation: true,
+    showUsabilityEvaluation: true,
+  ),
   checklistItems: <BetaChecklistItem>[
     BetaChecklistItem(id: 'login', title: 'Login'),
     BetaChecklistItem(id: 'home', title: 'Home'),

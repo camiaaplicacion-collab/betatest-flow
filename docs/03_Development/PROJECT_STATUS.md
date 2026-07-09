@@ -6,7 +6,7 @@ BetaTest Flow se encuentra en una etapa de control documental y alineación de a
 
 ## Versión actual
 
-Alpha 0.2 (base contractual)
+v0.0.3-beta (cierre tecnico)
 
 ## Fase actual del Método Revas
 
@@ -22,7 +22,8 @@ Nueva historia activa: `Alpha 0.2 Final Review`
 
 ## Estado general
 
-En curso, estable y bajo control.
+Estado: v0.0.3-beta
+Cerrado.
 
 ## Arquitectura
 
@@ -110,11 +111,12 @@ EPIC 11 Prompt de Correccion: Congelada.
 
 ## Última actualización
 
-2026-07-02
+2026-07-08
 
 ## Próximo objetivo
 
-Preparar revision final de Alpha 0.2.
+v0.1.0
+SDK reutilizable profesional.
 
 ## Bloqueadores
 

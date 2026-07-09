@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'beta_feedback_field_config.dart';
 import '../domain/models/beta_checklist_item.dart';
 
 class BetaTestFlowConfig {
@@ -13,6 +14,7 @@ class BetaTestFlowConfig {
     this.firebaseCollection = 'beta_reports',
     this.primaryColor,
     this.enableUxEvaluation = false,
+    this.fieldConfig = const BetaFeedbackFieldConfig(),
   });
 
   final String appId;
@@ -23,6 +25,7 @@ class BetaTestFlowConfig {
   final String firebaseCollection;
   final Color? primaryColor;
   final bool enableUxEvaluation;
+  final BetaFeedbackFieldConfig fieldConfig;
   final String reportVersion;
 
   Map<String, dynamic> toMap() {
@@ -35,6 +38,7 @@ class BetaTestFlowConfig {
       'firebaseCollection': firebaseCollection,
       'primaryColor': primaryColor?.toARGB32(),
       'enableUxEvaluation': enableUxEvaluation,
+      'fieldConfig': fieldConfig.toMap(),
       'reportVersion': reportVersion,
     };
   }
@@ -53,7 +57,20 @@ class BetaTestFlowConfig {
           ? null
           : Color(map['primaryColor'] as int),
       enableUxEvaluation: map['enableUxEvaluation'] as bool? ?? false,
+      fieldConfig: _resolveFieldConfig(map['fieldConfig']),
       reportVersion: map['reportVersion'] as String? ?? 'v1',
     );
+  }
+
+  static BetaFeedbackFieldConfig _resolveFieldConfig(dynamic rawValue) {
+    if (rawValue is Map<String, dynamic>) {
+      return BetaFeedbackFieldConfig.fromMap(rawValue);
+    }
+    if (rawValue is Map) {
+      return BetaFeedbackFieldConfig.fromMap(
+        rawValue.map((key, value) => MapEntry('$key', value)),
+      );
+    }
+    return const BetaFeedbackFieldConfig();
   }
 }

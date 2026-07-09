@@ -49,6 +49,7 @@ flutterfire configure
 - Se muestra una pantalla simple con titulo `BetaTest Flow SDK Demo`.
 - Se muestra un texto corto que indica que es una demo de integracion.
 - Se puede abrir el modal de feedback desde `BetaFeedbackButton` y enviar reporte con los datos demo.
+- En `Chrome`, si no existe configuracion FlutterFire, el ejemplo usa `FirebaseOptions` demo para permitir validacion visual local de la UI.
 
 ## Que NO demuestra este ejemplo
 

@@ -7,15 +7,26 @@
 - SDK Flutter reutilizable para feedback beta.
 - Persistencia en Firebase Firestore mediante repositorio incluido.
 - Captura de feedback textual, checklist y datos tecnicos del dispositivo.
+- Bloque UX avanzado configurable (interfaz, colores y facilidad de uso) para paridad BUSKIA.
 - Generacion de reporte estructurado con `markdownReport`.
 - Soporte de borrador local con `SharedPreferences`.
 - Herramienta de exportacion local (`tools/export_beta_reports.dart`) a JSON, CSV y Markdown.
 - Configuracion por app/campana con `BetaTestFlowConfig`.
 
+## Novedades de v0.0.3-beta
+
+- Beta Analysis Engine
+- Offline JSON Export
+- Executive Report
+- Release Decision
+- Beta Confidence Score
+- Action Plan
+- AI Correction Prompt
+
 ## Requisitos
 
 - Dart: `^3.11.5`
-- Flutter: `>=1.17.0`
+- Flutter: `>=3.35.0`
 
 ## Instalacion
 
@@ -144,4 +155,18 @@ dart run tools/export_beta_reports.dart \
 	--project-id your-firebase-project \
 	--app-id demo_app \
 	--campaign-id demo_beta_1
+```
+
+Modo offline opcional (sin Firestore):
+
+```bash
+dart run tools/export_beta_reports.dart \
+	--input-json /absolute/path/beta_reports.json \
+	--out-dir exports
+```
+
+Comando demo con fixture oficial:
+
+```bash
+dart run tools/export_beta_reports.dart --input-json example/data/sample_beta_reports.json --out-dir exports/demo
 ```

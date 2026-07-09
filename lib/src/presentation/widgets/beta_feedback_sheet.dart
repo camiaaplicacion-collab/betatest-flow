@@ -34,17 +34,62 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
   static const String _severityHigh = 'alta';
   static const String _severityCritical = 'critica';
 
+  static const String _reproducibilityYes = 'Si';
+  static const String _reproducibilityNo = 'No';
+  static const String _reproducibilitySometimes = 'A veces';
+  static const String _reproducibilityUnknown = 'No lo se';
+
+  static const String _usageImpactNone = 'No afecta';
+  static const String _usageImpactLittle = 'Afecta un poco';
+  static const String _usageImpactHigh = 'Afecta mucho';
+  static const String _usageImpactLeave = 'Me haria dejar de usarla';
+
+  static const String _publishRecommendationYes = 'Si';
+  static const String _publishRecommendationYesWithAdjustments =
+      'Si, con ajustes menores';
+  static const String _publishRecommendationNotYet = 'No todavia';
+  static const String _publishRecommendationNo = 'No';
+
+    static const String _interfaceVeryClear = 'Muy clara';
+    static const String _interfaceClear = 'Clara';
+    static const String _interfaceConfusing = 'Confusa';
+    static const String _interfaceVeryConfusing = 'Muy confusa';
+
+    static const String _colorCorrect = 'Correctos';
+    static const String _colorImprove = 'Mejorables';
+    static const String _colorConfusing = 'Confusos';
+    static const String _colorNoHelp = 'No ayudan';
+
+    static const String _usabilityVeryEasy = 'Muy facil';
+    static const String _usabilityEasy = 'Facil';
+    static const String _usabilityDifficult = 'Dificil';
+    static const String _usabilityVeryDifficult = 'Muy dificil';
+
+  static const String _submitErrorText =
+      'No se pudo enviar el reporte. Intenta nuevamente.';
+
   final _formKey = GlobalKey<FormState>();
+  final _submitErrorKey = GlobalKey();
   final _mainCommentController = TextEditingController();
   final _stepsController = TextEditingController();
   final _suggestionController = TextEditingController();
+  final _screenNameController = TextEditingController();
+  final _uxDetailsController = TextEditingController();
+  final _scrollController = ScrollController();
 
   bool _isLoadingDraft = true;
   bool _isSubmitting = false;
   bool _isSavingDraft = false;
+  String? _submitErrorMessage;
 
   String _generalResult = _resultWorkedWell;
   String _severity = _severityLow;
+  String _reproducibility = _reproducibilityUnknown;
+  String _usageImpact = _usageImpactNone;
+  String _publishRecommendation = _publishRecommendationYes;
+  String _interfaceEvaluation = _interfaceVeryClear;
+  String _colorEvaluation = _colorCorrect;
+  String _usabilityEvaluation = _usabilityVeryEasy;
   final Map<String, bool> _checklistSelections = <String, bool>{};
 
   @override
@@ -61,7 +106,30 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
     _mainCommentController.dispose();
     _stepsController.dispose();
     _suggestionController.dispose();
+    _screenNameController.dispose();
+    _uxDetailsController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _scrollSubmitErrorIntoView() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      final context = _submitErrorKey.currentContext;
+      if (context == null) {
+        return;
+      }
+
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 250),
+        alignment: 0.95,
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   Future<void> _loadDraft() async {
@@ -84,6 +152,7 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
       }
 
       _applyFeedbackTextToFields(draft.feedbackText);
+      _applyDraftFieldFallbacks(draft);
       setState(() {});
     } finally {
       if (mounted) {
@@ -116,13 +185,59 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
 
       final generalResult = parsed['generalResult'] as String?;
       final severity = parsed['severity'] as String?;
+      final reproducibility = parsed['reproducibility'] as String?;
+      final usageImpact = parsed['usageImpact'] as String?;
+      final publishRecommendation = parsed['publishRecommendation'] as String?;
+        final interfaceEvaluation = parsed['interfaceEvaluation'] as String?;
+        final colorEvaluation = parsed['colorEvaluation'] as String?;
+        final usabilityEvaluation = parsed['usabilityEvaluation'] as String?;
       _generalResult = _allowedGeneralResult(generalResult) ?? _generalResult;
       _severity = _allowedSeverity(severity) ?? _severity;
+      _reproducibility =
+          _allowedReproducibility(reproducibility) ?? _reproducibility;
+      _usageImpact = _allowedUsageImpact(usageImpact) ?? _usageImpact;
+      _publishRecommendation =
+          _allowedPublishRecommendation(publishRecommendation) ??
+          _publishRecommendation;
+        _interfaceEvaluation =
+          _allowedInterfaceEvaluation(interfaceEvaluation) ??
+          _interfaceEvaluation;
+        _colorEvaluation =
+          _allowedColorEvaluation(colorEvaluation) ?? _colorEvaluation;
+        _usabilityEvaluation =
+          _allowedUsabilityEvaluation(usabilityEvaluation) ??
+          _usabilityEvaluation;
       _stepsController.text = parsed['steps'] as String? ?? '';
       _suggestionController.text = parsed['suggestion'] as String? ?? '';
+      _screenNameController.text = parsed['screenName'] as String? ?? '';
+      _uxDetailsController.text = parsed['uxDetails'] as String? ?? '';
     } catch (_) {
       // Keep defaults if payload is malformed.
     }
+  }
+
+  void _applyDraftFieldFallbacks(BetaFeedbackReport draft) {
+    if (_screenNameController.text.trim().isEmpty && draft.screenName != null) {
+      _screenNameController.text = draft.screenName!;
+    }
+    if (_uxDetailsController.text.trim().isEmpty && draft.uxDetails != null) {
+      _uxDetailsController.text = draft.uxDetails!;
+    }
+
+    _reproducibility =
+        _allowedReproducibility(draft.reproducibility) ?? _reproducibility;
+    _usageImpact = _allowedUsageImpact(draft.usageImpact) ?? _usageImpact;
+    _publishRecommendation =
+        _allowedPublishRecommendation(draft.publishRecommendation) ??
+        _publishRecommendation;
+    _interfaceEvaluation =
+      _allowedInterfaceEvaluation(draft.interfaceEvaluation) ??
+      _interfaceEvaluation;
+    _colorEvaluation =
+      _allowedColorEvaluation(draft.colorEvaluation) ?? _colorEvaluation;
+    _usabilityEvaluation =
+      _allowedUsabilityEvaluation(draft.usabilityEvaluation) ??
+      _usabilityEvaluation;
   }
 
   Map<String, dynamic> _safeDecodeMap(String raw) {
@@ -153,6 +268,78 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
       case _severityMedium:
       case _severityHigh:
       case _severityCritical:
+        return value;
+      default:
+        return null;
+    }
+  }
+
+  String? _allowedReproducibility(String? value) {
+    switch (value) {
+      case _reproducibilityYes:
+      case _reproducibilityNo:
+      case _reproducibilitySometimes:
+      case _reproducibilityUnknown:
+        return value;
+      default:
+        return null;
+    }
+  }
+
+  String? _allowedUsageImpact(String? value) {
+    switch (value) {
+      case _usageImpactNone:
+      case _usageImpactLittle:
+      case _usageImpactHigh:
+      case _usageImpactLeave:
+        return value;
+      default:
+        return null;
+    }
+  }
+
+  String? _allowedPublishRecommendation(String? value) {
+    switch (value) {
+      case _publishRecommendationYes:
+      case _publishRecommendationYesWithAdjustments:
+      case _publishRecommendationNotYet:
+      case _publishRecommendationNo:
+        return value;
+      default:
+        return null;
+    }
+  }
+
+  String? _allowedInterfaceEvaluation(String? value) {
+    switch (value) {
+      case _interfaceVeryClear:
+      case _interfaceClear:
+      case _interfaceConfusing:
+      case _interfaceVeryConfusing:
+        return value;
+      default:
+        return null;
+    }
+  }
+
+  String? _allowedColorEvaluation(String? value) {
+    switch (value) {
+      case _colorCorrect:
+      case _colorImprove:
+      case _colorConfusing:
+      case _colorNoHelp:
+        return value;
+      default:
+        return null;
+    }
+  }
+
+  String? _allowedUsabilityEvaluation(String? value) {
+    switch (value) {
+      case _usabilityVeryEasy:
+      case _usabilityEasy:
+      case _usabilityDifficult:
+      case _usabilityVeryDifficult:
         return value;
       default:
         return null;
@@ -202,6 +389,7 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
 
     setState(() {
       _isSubmitting = true;
+      _submitErrorMessage = null;
     });
 
     try {
@@ -221,6 +409,15 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
         const SnackBar(content: Text('Reporte enviado con exito')),
       );
       Navigator.of(context).pop();
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _submitErrorMessage = _submitErrorText;
+      });
+      _scrollSubmitErrorIntoView();
     } finally {
       if (mounted) {
         setState(() {
@@ -258,6 +455,31 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
       'email': (widget.email ?? '').trim(),
     };
 
+    if (widget.config.fieldConfig.showScreenName) {
+      payload['screenName'] = _screenNameController.text.trim();
+    }
+    if (widget.config.fieldConfig.showReproducibility) {
+      payload['reproducibility'] = _reproducibility;
+    }
+    if (widget.config.fieldConfig.showUsageImpact) {
+      payload['usageImpact'] = _usageImpact;
+    }
+    if (widget.config.fieldConfig.showPublishRecommendation) {
+      payload['publishRecommendation'] = _publishRecommendation;
+    }
+    if (widget.config.fieldConfig.showUxDetails) {
+      payload['uxDetails'] = _uxDetailsController.text.trim();
+    }
+    if (widget.config.fieldConfig.showInterfaceEvaluation) {
+      payload['interfaceEvaluation'] = _interfaceEvaluation;
+    }
+    if (widget.config.fieldConfig.showColorEvaluation) {
+      payload['colorEvaluation'] = _colorEvaluation;
+    }
+    if (widget.config.fieldConfig.showUsabilityEvaluation) {
+      payload['usabilityEvaluation'] = _usabilityEvaluation;
+    }
+
     final feedbackText = '${_mainCommentController.text.trim()}\n[btf_form_v1]${jsonEncode(payload)}';
 
     return BetaFeedbackReport(
@@ -268,9 +490,36 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
       userId: widget.userId,
       reportVersion: widget.config.reportVersion,
       feedbackText: feedbackText,
+      screenName: widget.config.fieldConfig.showScreenName
+          ? _optionalText(_screenNameController.text)
+          : null,
+      reproducibility: widget.config.fieldConfig.showReproducibility
+          ? _reproducibility
+          : null,
+      usageImpact: widget.config.fieldConfig.showUsageImpact ? _usageImpact : null,
+      publishRecommendation: widget.config.fieldConfig.showPublishRecommendation
+          ? _publishRecommendation
+          : null,
+      uxDetails: widget.config.fieldConfig.showUxDetails
+          ? _optionalText(_uxDetailsController.text)
+          : null,
+        interfaceEvaluation: widget.config.fieldConfig.showInterfaceEvaluation
+          ? _interfaceEvaluation
+          : null,
+        colorEvaluation: widget.config.fieldConfig.showColorEvaluation
+          ? _colorEvaluation
+          : null,
+        usabilityEvaluation: widget.config.fieldConfig.showUsabilityEvaluation
+          ? _usabilityEvaluation
+          : null,
       checklistResponses: Map<String, bool>.from(_checklistSelections),
       deviceTechnicalData: const <String, dynamic>{},
     );
+  }
+
+  String? _optionalText(String value) {
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
   }
 
   @override
@@ -299,6 +548,7 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
                 : Form(
                     key: _formKey,
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -398,6 +648,165 @@ class _BetaFeedbackSheetState extends State<BetaFeedbackSheet> {
                               border: OutlineInputBorder(),
                             ),
                           ),
+                          if (widget.config.fieldConfig.showScreenName) ...[
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: _screenNameController,
+                              minLines: 1,
+                              maxLines: 2,
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              decoration: const InputDecoration(
+                                labelText: 'En que pantalla ocurrio?',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showReproducibility) ...[
+                            const SizedBox(height: 12),
+                            const Text('Se puede repetir?'),
+                            _ResultRadioGroup(
+                              currentValue: _reproducibility,
+                              values: const <String>[
+                                _reproducibilityYes,
+                                _reproducibilityNo,
+                                _reproducibilitySometimes,
+                                _reproducibilityUnknown,
+                              ],
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              onChanged: (value) {
+                                setState(() {
+                                  _reproducibility = value;
+                                });
+                              },
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showUsageImpact) ...[
+                            const SizedBox(height: 12),
+                            const Text('Esto afecta tus ganas de seguir usando la app?'),
+                            _ResultRadioGroup(
+                              currentValue: _usageImpact,
+                              values: const <String>[
+                                _usageImpactNone,
+                                _usageImpactLittle,
+                                _usageImpactHigh,
+                                _usageImpactLeave,
+                              ],
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              onChanged: (value) {
+                                setState(() {
+                                  _usageImpact = value;
+                                });
+                              },
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showPublishRecommendation) ...[
+                            const SizedBox(height: 12),
+                            const Text('Recomendarias publicar esta version?'),
+                            _ResultRadioGroup(
+                              currentValue: _publishRecommendation,
+                              values: const <String>[
+                                _publishRecommendationYes,
+                                _publishRecommendationYesWithAdjustments,
+                                _publishRecommendationNotYet,
+                                _publishRecommendationNo,
+                              ],
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              onChanged: (value) {
+                                setState(() {
+                                  _publishRecommendation = value;
+                                });
+                              },
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showUxDetails) ...[
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: _uxDetailsController,
+                              minLines: 2,
+                              maxLines: 4,
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              decoration: const InputDecoration(
+                                labelText:
+                                    'Comentarios sobre diseno, claridad o facilidad de uso',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showInterfaceEvaluation) ...[
+                            const SizedBox(height: 12),
+                            const Text('Evaluacion de interfaz'),
+                            _ResultRadioGroup(
+                              currentValue: _interfaceEvaluation,
+                              values: const <String>[
+                                _interfaceVeryClear,
+                                _interfaceClear,
+                                _interfaceConfusing,
+                                _interfaceVeryConfusing,
+                              ],
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              onChanged: (value) {
+                                setState(() {
+                                  _interfaceEvaluation = value;
+                                });
+                              },
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showColorEvaluation) ...[
+                            const SizedBox(height: 12),
+                            const Text('Evaluacion de colores'),
+                            _ResultRadioGroup(
+                              currentValue: _colorEvaluation,
+                              values: const <String>[
+                                _colorCorrect,
+                                _colorImprove,
+                                _colorConfusing,
+                                _colorNoHelp,
+                              ],
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              onChanged: (value) {
+                                setState(() {
+                                  _colorEvaluation = value;
+                                });
+                              },
+                            ),
+                          ],
+                          if (widget.config.fieldConfig.showUsabilityEvaluation) ...[
+                            const SizedBox(height: 12),
+                            const Text('Facilidad de uso'),
+                            _ResultRadioGroup(
+                              currentValue: _usabilityEvaluation,
+                              values: const <String>[
+                                _usabilityVeryEasy,
+                                _usabilityEasy,
+                                _usabilityDifficult,
+                                _usabilityVeryDifficult,
+                              ],
+                              enabled: !(_isSubmitting || _isSavingDraft),
+                              onChanged: (value) {
+                                setState(() {
+                                  _usabilityEvaluation = value;
+                                });
+                              },
+                            ),
+                          ],
+                          if (_submitErrorMessage != null) ...[
+                            const SizedBox(height: 12),
+                            Container(
+                              key: _submitErrorKey,
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.errorContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                _submitErrorMessage!,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onErrorContainer,
+                                ),
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 16),
                           Row(
                             children: [

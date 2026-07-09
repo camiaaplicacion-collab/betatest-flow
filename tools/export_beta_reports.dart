@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:betatest_flow/src/domain/models/action_plan_item.dart';
+import 'package:betatest_flow/src/domain/services/beta_analysis_service.dart';
 
 Future<void> main(List<String> args) async {
   late final _ParsedArgs parsed;
@@ -16,6 +18,37 @@ Future<void> main(List<String> args) async {
 
   if (parsed.showHelp) {
     _printUsage();
+    return;
+  }
+
+  final outDir = Directory(parsed.outDir);
+  if (!outDir.existsSync()) {
+    outDir.createSync(recursive: true);
+  }
+
+  final jsonPath = '${parsed.outDir}${Platform.pathSeparator}beta_reports.json';
+  final csvPath = '${parsed.outDir}${Platform.pathSeparator}beta_reports.csv';
+  final mdPath = '${parsed.outDir}${Platform.pathSeparator}beta_summary.md';
+
+  if (parsed.inputJsonPath != null && parsed.inputJsonPath!.isNotEmpty) {
+    final documents = await _loadReportsFromInputJson(
+      parsed.inputJsonPath!,
+      appIdFilter: parsed.appId,
+      campaignIdFilter: parsed.campaignId,
+    );
+
+    await File(jsonPath).writeAsString(
+      const JsonEncoder.withIndent('  ').convert(documents),
+    );
+    await File(csvPath).writeAsString(_toCsv(documents));
+    await File(mdPath).writeAsString(_buildSummaryMarkdown(documents));
+
+    stdout.writeln('Export completed (offline JSON mode).');
+    stdout.writeln('- Input JSON: ${parsed.inputJsonPath}');
+    stdout.writeln('- JSON: $jsonPath');
+    stdout.writeln('- CSV: $csvPath');
+    stdout.writeln('- MD:  $mdPath');
+    stdout.writeln('Total reports: ${documents.length}');
     return;
   }
 
@@ -47,11 +80,6 @@ Future<void> main(List<String> args) async {
     return;
   }
 
-  final outDir = Directory(parsed.outDir);
-  if (!outDir.existsSync()) {
-    outDir.createSync(recursive: true);
-  }
-
   final authClient = await clientViaServiceAccount(
     serviceAccount,
     const ['https://www.googleapis.com/auth/datastore'],
@@ -64,10 +92,6 @@ Future<void> main(List<String> args) async {
       appIdFilter: parsed.appId,
       campaignIdFilter: parsed.campaignId,
     );
-
-    final jsonPath = '${parsed.outDir}${Platform.pathSeparator}beta_reports.json';
-    final csvPath = '${parsed.outDir}${Platform.pathSeparator}beta_reports.csv';
-    final mdPath = '${parsed.outDir}${Platform.pathSeparator}beta_summary.md';
 
     await File(jsonPath).writeAsString(
       const JsonEncoder.withIndent('  ').convert(documents),
@@ -84,6 +108,88 @@ Future<void> main(List<String> args) async {
   } finally {
     authClient.close();
   }
+}
+
+Future<List<Map<String, dynamic>>> _loadReportsFromInputJson(
+  String inputJsonPath, {
+  required String? appIdFilter,
+  required String? campaignIdFilter,
+}) async {
+  final inputFile = File(inputJsonPath);
+  if (!inputFile.existsSync()) {
+    throw ArgumentError('Input JSON file not found: $inputJsonPath');
+  }
+
+  final raw = jsonDecode(await inputFile.readAsString());
+  if (raw is! List) {
+    throw ArgumentError('Input JSON must be an array of reports or Firestore documents.');
+  }
+
+  final reports = <Map<String, dynamic>>[];
+  for (final item in raw) {
+    if (item is! Map) {
+      continue;
+    }
+
+    final map = item.map((key, value) => MapEntry('$key', value));
+    final normalized = _isFirestoreDocumentShape(map)
+        ? _normalizeDocument(map)
+        : _normalizeInputReport(map);
+
+    if (_matchesFilters(normalized, appIdFilter: appIdFilter, campaignIdFilter: campaignIdFilter)) {
+      reports.add(normalized);
+    }
+  }
+
+  return reports;
+}
+
+bool _isFirestoreDocumentShape(Map<String, dynamic> candidate) {
+  return candidate.containsKey('fields') || candidate.containsKey('name');
+}
+
+Map<String, dynamic> _normalizeInputReport(Map<String, dynamic> input) {
+  final checklist = (input['checklist'] as List<dynamic>? ?? const <dynamic>[])
+      .map((value) => value.toString())
+      .toList(growable: false);
+
+  Map<String, dynamic> deviceData;
+  final rawDeviceData = input['deviceTechnicalData'];
+  if (rawDeviceData is Map) {
+    deviceData = rawDeviceData.map((key, value) => MapEntry('$key', value));
+  } else {
+    deviceData = <String, dynamic>{};
+  }
+
+  return <String, dynamic>{
+    'documentId': input['documentId']?.toString() ?? '',
+    'appId': input['appId']?.toString() ?? '',
+    'appName': input['appName']?.toString() ?? '',
+    'campaignId': input['campaignId']?.toString() ?? '',
+    'campaignName': input['campaignName']?.toString() ?? '',
+    'userId': input['userId']?.toString() ?? '',
+    'email': input['email']?.toString() ?? '',
+    'checklist': checklist,
+    'result': input['result']?.toString() ?? '',
+    'severity': input['severity']?.toString() ?? '',
+    'feedbackText': input['feedbackText']?.toString() ?? '',
+    'screenName': input['screenName']?.toString() ?? '',
+    'reproducibility': input['reproducibility']?.toString() ?? '',
+    'usageImpact': input['usageImpact']?.toString() ?? '',
+    'publishRecommendation': input['publishRecommendation']?.toString() ?? '',
+    'uxDetails': input['uxDetails']?.toString() ?? '',
+    'interfaceEvaluation': input['interfaceEvaluation']?.toString() ?? '',
+    'colorEvaluation': input['colorEvaluation']?.toString() ?? '',
+    'usabilityEvaluation': input['usabilityEvaluation']?.toString() ?? '',
+    'stepsToReproduce': input['stepsToReproduce']?.toString() ?? '',
+    'suggestion': input['suggestion']?.toString() ?? '',
+    'rating': input['rating'],
+    'wouldPublishToday': input['wouldPublishToday'],
+    'deviceTechnicalData': deviceData,
+    'markdownReport': input['markdownReport']?.toString() ?? '',
+    'createdAt': input['createdAt']?.toString() ?? '',
+    'updatedAt': input['updatedAt']?.toString() ?? '',
+  };
 }
 
 Future<List<Map<String, dynamic>>> _fetchAllReports(
@@ -176,6 +282,25 @@ Map<String, dynamic> _normalizeDocument(Map<String, dynamic> document) {
     'result': (parsedFeedback['generalResult'] as String?) ?? (fields['result'] as String? ?? ''),
     'severity': (parsedFeedback['severity'] as String?) ?? (fields['severity'] as String? ?? ''),
     'feedbackText': feedbackText,
+    'screenName': (fields['screenName'] as String?) ??
+      (parsedFeedback['screenName']?.toString() ?? ''),
+    'reproducibility': (fields['reproducibility'] as String?) ??
+      (parsedFeedback['reproducibility']?.toString() ?? ''),
+    'usageImpact': (fields['usageImpact'] as String?) ??
+      (parsedFeedback['usageImpact']?.toString() ?? ''),
+    'publishRecommendation':
+      (fields['publishRecommendation'] as String?) ??
+        (parsedFeedback['publishRecommendation']?.toString() ?? ''),
+    'uxDetails': (fields['uxDetails'] as String?) ??
+      (parsedFeedback['uxDetails']?.toString() ?? ''),
+    'interfaceEvaluation':
+      (fields['interfaceEvaluation'] as String?) ??
+        (parsedFeedback['interfaceEvaluation']?.toString() ?? ''),
+    'colorEvaluation': (fields['colorEvaluation'] as String?) ??
+      (parsedFeedback['colorEvaluation']?.toString() ?? ''),
+    'usabilityEvaluation':
+      (fields['usabilityEvaluation'] as String?) ??
+        (parsedFeedback['usabilityEvaluation']?.toString() ?? ''),
     'stepsToReproduce':
         (parsedFeedback['steps'] as String?) ?? (fields['stepsToReproduce'] as String? ?? ''),
     'suggestion': (parsedFeedback['suggestion'] as String?) ?? (fields['suggestion'] as String? ?? ''),
@@ -308,6 +433,14 @@ String _toCsv(List<Map<String, dynamic>> reports) {
     'result',
     'severity',
     'feedbackText',
+    'screenName',
+    'reproducibility',
+    'usageImpact',
+    'publishRecommendation',
+    'uxDetails',
+    'interfaceEvaluation',
+    'colorEvaluation',
+    'usabilityEvaluation',
     'stepsToReproduce',
     'suggestion',
     'rating',
@@ -341,12 +474,25 @@ String _csvEscape(String input) {
 }
 
 String _buildSummaryMarkdown(List<Map<String, dynamic>> reports) {
-  final severityCount = _countBy(reports, 'severity');
-  final resultCount = _countBy(reports, 'result');
+  final analysis = const BetaAnalysisService().analyze(reports);
+  final snapshot = analysis.metricsSnapshot;
+
+  final severityCount = snapshot.severityDistribution.counts;
+  final resultCount = snapshot.resultDistribution.counts;
+  final screenCount = snapshot.screenNameDistribution.counts;
+  final reproducibilityCount = snapshot.reproducibilityDistribution.counts;
+  final usageImpactCount = snapshot.usageImpactDistribution.counts;
+  final publishRecommendationCount =
+      snapshot.publishRecommendationDistribution.counts;
+  final interfaceEvaluationCount =
+      snapshot.interfaceEvaluationDistribution.counts;
+  final colorEvaluationCount = snapshot.colorEvaluationDistribution.counts;
+  final usabilityEvaluationCount = snapshot.usabilityEvaluationDistribution.counts;
   final checklistCount = <String, int>{};
   final technicalCount = <String, int>{};
   final problemReports = <Map<String, dynamic>>[];
   final suggestions = <String>[];
+  final uxObservations = <String>[];
 
   for (final report in reports) {
     final checklist = (report['checklist'] as List<dynamic>? ?? const <dynamic>[])
@@ -359,6 +505,11 @@ String _buildSummaryMarkdown(List<Map<String, dynamic>> reports) {
     final suggestion = (report['suggestion'] ?? '').toString().trim();
     if (suggestion.isNotEmpty) {
       suggestions.add(suggestion);
+    }
+
+    final uxDetail = (report['uxDetails'] ?? '').toString().trim();
+    if (uxDetail.isNotEmpty) {
+      uxObservations.add(uxDetail);
     }
 
     final severity = (report['severity'] ?? '').toString();
@@ -389,12 +540,38 @@ String _buildSummaryMarkdown(List<Map<String, dynamic>> reports) {
 
   final sortedChecklist = _sortByValueDesc(checklistCount);
   final sortedTechnical = _sortByValueDesc(technicalCount);
+  final sortedScreens = _sortByValueDesc(screenCount);
+  final sortedReproducibility = _sortByValueDesc(reproducibilityCount);
+  final sortedUsageImpact = _sortByValueDesc(usageImpactCount);
+  final sortedPublishRecommendation = _sortByValueDesc(publishRecommendationCount);
+  final sortedInterfaceEvaluation = _sortByValueDesc(interfaceEvaluationCount);
+  final sortedColorEvaluation = _sortByValueDesc(colorEvaluationCount);
+  final sortedUsabilityEvaluation = _sortByValueDesc(usabilityEvaluationCount);
 
   final prompt = _buildCorrectionPrompt(
     reports: reports,
+    releaseDecisionTitle: analysis.releaseDecision.title,
+    releaseDecisionRationale: analysis.releaseDecision.rationale,
+    confidenceOverallScore: analysis.confidenceScore.overallScore,
+    confidenceLabel: analysis.confidenceScore.label,
+    confidenceStabilityScore: analysis.confidenceScore.stabilityScore,
+    confidenceUsabilityScore: analysis.confidenceScore.usabilityScore,
+    confidenceReleaseReadinessScore: analysis.confidenceScore.releaseReadinessScore,
+    actionPlan: analysis.actionPlan,
     severityCount: severityCount,
     resultCount: resultCount,
     topChecklist: sortedChecklist.take(5).toList(growable: false),
+    topScreens: sortedScreens.take(5).toList(growable: false),
+    reproducibilitySummary: sortedReproducibility.take(5).toList(growable: false),
+    usageImpactSummary: sortedUsageImpact.take(5).toList(growable: false),
+    publishRecommendationSummary:
+        sortedPublishRecommendation.take(5).toList(growable: false),
+    interfaceEvaluationSummary:
+        sortedInterfaceEvaluation.take(5).toList(growable: false),
+    colorEvaluationSummary: sortedColorEvaluation.take(5).toList(growable: false),
+    usabilityEvaluationSummary:
+        sortedUsabilityEvaluation.take(5).toList(growable: false),
+    topUxObservations: uxObservations.take(5).toList(growable: false),
     topProblems: problemReports.take(5).toList(growable: false),
     topSuggestions: suggestions.take(5).toList(growable: false),
   );
@@ -403,7 +580,7 @@ String _buildSummaryMarkdown(List<Map<String, dynamic>> reports) {
   buffer.writeln('# Resumen Beta');
   buffer.writeln();
   buffer.writeln('## Total de reportes');
-  buffer.writeln('- ${reports.length}');
+  buffer.writeln('- ${analysis.totalReports}');
   buffer.writeln();
 
   buffer.writeln('## Por gravedad');
@@ -461,6 +638,138 @@ String _buildSummaryMarkdown(List<Map<String, dynamic>> reports) {
   }
   buffer.writeln();
 
+  buffer.writeln('## Pantallas mas reportadas');
+  if (sortedScreens.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedScreens.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Repetibilidad');
+  if (sortedReproducibility.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedReproducibility.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Impacto en uso');
+  if (sortedUsageImpact.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedUsageImpact.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Recomendacion de publicacion');
+  if (sortedPublishRecommendation.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedPublishRecommendation.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  final decision = analysis.releaseDecision;
+  buffer.writeln('## Decision de publicacion');
+  buffer.writeln('- Estado: ${decision.title}');
+  buffer.writeln('- Razon: ${decision.rationale}');
+  if (decision.blockingReasons.isNotEmpty) {
+    buffer.writeln('- Bloqueadores:');
+    for (final reason in decision.blockingReasons) {
+      buffer.writeln('  - $reason');
+    }
+  }
+  if (decision.conditionsToGoLive.isNotEmpty) {
+    buffer.writeln('- Condiciones para publicar:');
+    for (final condition in decision.conditionsToGoLive) {
+      buffer.writeln('  - $condition');
+    }
+  }
+  buffer.writeln();
+
+  final score = analysis.confidenceScore;
+  buffer.writeln('## Beta Confidence Score');
+  buffer.writeln('- Overall: ${score.overallScore}/100 (${score.label})');
+  buffer.writeln('- Stability: ${score.stabilityScore}/100');
+  buffer.writeln('- Usability: ${score.usabilityScore}/100');
+  buffer.writeln('- Release readiness: ${score.releaseReadinessScore}/100');
+  if (score.penalties.isNotEmpty) {
+    buffer.writeln('- Penalizaciones:');
+    for (final penalty in score.penalties) {
+      buffer.writeln('  - $penalty');
+    }
+  }
+  if (score.strengths.isNotEmpty) {
+    buffer.writeln('- Fortalezas:');
+    for (final strength in score.strengths) {
+      buffer.writeln('  - $strength');
+    }
+  }
+  buffer.writeln();
+
+  final actionPlan = analysis.actionPlan;
+  buffer.writeln('## Plan de accion 48h');
+  if (actionPlan.isEmpty) {
+    buffer.writeln('- Sin acciones sugeridas');
+  } else {
+    for (final item in actionPlan) {
+      buffer.writeln('- P${item.priority}: ${item.title}');
+      buffer.writeln('  - Razon: ${_normalizeReportCountWording(item.rationale)}');
+      buffer.writeln('  - Accion sugerida: ${item.suggestedAction}');
+      buffer.writeln('  - Validacion: ${item.validation}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Evaluacion de interfaz');
+  if (sortedInterfaceEvaluation.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedInterfaceEvaluation.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Evaluacion de colores');
+  if (sortedColorEvaluation.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedColorEvaluation.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Facilidad de uso');
+  if (sortedUsabilityEvaluation.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final entry in sortedUsabilityEvaluation.take(10)) {
+      buffer.writeln('- ${entry.key}: ${entry.value}');
+    }
+  }
+  buffer.writeln();
+
+  buffer.writeln('## Observaciones UX destacadas');
+  if (uxObservations.isEmpty) {
+    buffer.writeln('- Sin datos');
+  } else {
+    for (final detail in uxObservations.take(15)) {
+      buffer.writeln('- $detail');
+    }
+  }
+  buffer.writeln();
+
   buffer.writeln('## Datos tecnicos frecuentes');
   if (sortedTechnical.isEmpty) {
     buffer.writeln('- Sin datos');
@@ -494,18 +803,6 @@ String _buildSummaryMarkdown(List<Map<String, dynamic>> reports) {
   return buffer.toString();
 }
 
-Map<String, int> _countBy(List<Map<String, dynamic>> reports, String key) {
-  final map = <String, int>{};
-  for (final report in reports) {
-    final value = report[key]?.toString().trim() ?? '';
-    if (value.isEmpty) {
-      continue;
-    }
-    map[value] = (map[value] ?? 0) + 1;
-  }
-  return map;
-}
-
 List<MapEntry<String, int>> _sortByValueDesc(Map<String, int> source) {
   final entries = source.entries.toList(growable: false)
     ..sort((a, b) => b.value.compareTo(a.value));
@@ -514,9 +811,25 @@ List<MapEntry<String, int>> _sortByValueDesc(Map<String, int> source) {
 
 String _buildCorrectionPrompt({
   required List<Map<String, dynamic>> reports,
+  required String releaseDecisionTitle,
+  required String releaseDecisionRationale,
+  required int confidenceOverallScore,
+  required String confidenceLabel,
+  required int confidenceStabilityScore,
+  required int confidenceUsabilityScore,
+  required int confidenceReleaseReadinessScore,
+  required List<ActionPlanItem> actionPlan,
   required Map<String, int> severityCount,
   required Map<String, int> resultCount,
   required List<MapEntry<String, int>> topChecklist,
+  required List<MapEntry<String, int>> topScreens,
+  required List<MapEntry<String, int>> reproducibilitySummary,
+  required List<MapEntry<String, int>> usageImpactSummary,
+  required List<MapEntry<String, int>> publishRecommendationSummary,
+  required List<MapEntry<String, int>> interfaceEvaluationSummary,
+  required List<MapEntry<String, int>> colorEvaluationSummary,
+  required List<MapEntry<String, int>> usabilityEvaluationSummary,
+  required List<String> topUxObservations,
   required List<Map<String, dynamic>> topProblems,
   required List<String> topSuggestions,
 }) {
@@ -527,6 +840,25 @@ String _buildCorrectionPrompt({
       resultCount.entries.map((entry) => '${entry.key}:${entry.value}').join(', ');
   final checklistSummary =
       topChecklist.map((entry) => '${entry.key}:${entry.value}').join(', ');
+    final screensSummary =
+      topScreens.map((entry) => '${entry.key}:${entry.value}').join(', ');
+    final reproducibilityText = reproducibilitySummary
+      .map((entry) => '${entry.key}:${entry.value}')
+      .join(', ');
+    final usageImpactText =
+      usageImpactSummary.map((entry) => '${entry.key}:${entry.value}').join(', ');
+    final publishRecommendationText = publishRecommendationSummary
+      .map((entry) => '${entry.key}:${entry.value}')
+      .join(', ');
+    final interfaceEvaluationText = interfaceEvaluationSummary
+      .map((entry) => '${entry.key}:${entry.value}')
+      .join(', ');
+    final colorEvaluationText = colorEvaluationSummary
+      .map((entry) => '${entry.key}:${entry.value}')
+      .join(', ');
+    final usabilityEvaluationText = usabilityEvaluationSummary
+      .map((entry) => '${entry.key}:${entry.value}')
+      .join(', ');
 
   final topProblemsText = topProblems
       .map((report) {
@@ -539,6 +871,17 @@ String _buildCorrectionPrompt({
       .join('\n');
 
   final suggestionsText = topSuggestions.map((item) => '- $item').join('\n');
+  final uxObservationsText = topUxObservations.map((item) => '- $item').join('\n');
+  final actionPlanText = actionPlan
+      .map((item) {
+        final priority = item.priority.toString();
+        final title = item.title;
+        final rationale = _normalizeReportCountWording(item.rationale);
+        final suggestedAction = item.suggestedAction;
+        final validation = item.validation;
+        return '- P$priority | $title\n  razon: $rationale\n  accion: $suggestedAction\n  validacion: $validation';
+      })
+      .join('\n');
 
   return '''
 Actua como un ingeniero senior corrigiendo una app Flutter basada en feedback beta real.
@@ -548,6 +891,20 @@ Contexto de reportes:
 - Severidad: $severitySummary
 - Resultado: $resultSummary
 - Areas mas probadas: $checklistSummary
+- Pantallas reportadas: ${screensSummary.isEmpty ? 'Sin datos' : screensSummary}
+- Repetibilidad: ${reproducibilityText.isEmpty ? 'Sin datos' : reproducibilityText}
+- Impacto en uso: ${usageImpactText.isEmpty ? 'Sin datos' : usageImpactText}
+- Recomendacion de publicacion: ${publishRecommendationText.isEmpty ? 'Sin datos' : publishRecommendationText}
+- Evaluacion de interfaz: ${interfaceEvaluationText.isEmpty ? 'Sin datos' : interfaceEvaluationText}
+- Evaluacion de colores: ${colorEvaluationText.isEmpty ? 'Sin datos' : colorEvaluationText}
+- Facilidad de uso: ${usabilityEvaluationText.isEmpty ? 'Sin datos' : usabilityEvaluationText}
+- Decision de publicacion: $releaseDecisionTitle
+- Motivo de decision: $releaseDecisionRationale
+- Beta Confidence Score: $confidenceOverallScore/100 ($confidenceLabel)
+- Subscores: estabilidad=$confidenceStabilityScore, usabilidad=$confidenceUsabilityScore, release readiness=$confidenceReleaseReadinessScore
+
+Plan de accion 48h (respetar prioridad):
+${actionPlanText.isEmpty ? '- Sin plan disponible' : actionPlanText}
 
 Problemas principales:
 ${topProblemsText.isEmpty ? '- Sin datos' : topProblemsText}
@@ -555,12 +912,26 @@ ${topProblemsText.isEmpty ? '- Sin datos' : topProblemsText}
 Sugerencias de usuarios:
 ${suggestionsText.isEmpty ? '- Sin datos' : suggestionsText}
 
-Entrega:
-1. Lista priorizada de bugs a corregir.
-2. Hipotesis de causa raiz por bug.
-3. Plan de fixes por iteraciones cortas.
-4. Casos de prueba para validar cada fix.
+Observaciones UX destacadas:
+${uxObservationsText.isEmpty ? '- Sin datos' : uxObservationsText}
+
+Restricciones obligatorias:
+- No hacer refactor general.
+- Corregir por prioridad del Plan de accion 48h.
+- Mantener compatibilidad hacia atras.
+- Ejecutar analyze y test al final de los cambios.
+
+Formato esperado de respuesta:
+1. Archivos modificados.
+2. Causa.
+3. Solucion.
+4. Validacion (incluye analyze/test).
 ''';
+}
+
+String _normalizeReportCountWording(String text) {
+  final genericSingularPattern = RegExp(r'\b1 reportes\b');
+  return text.replaceAll(genericSingularPattern, '1 reporte');
 }
 
 class _ParsedArgs {
@@ -568,6 +939,7 @@ class _ParsedArgs {
     required this.showHelp,
     required this.projectId,
     required this.serviceAccountPath,
+    required this.inputJsonPath,
     required this.appId,
     required this.campaignId,
     required this.outDir,
@@ -576,6 +948,7 @@ class _ParsedArgs {
   final bool showHelp;
   final String? projectId;
   final String? serviceAccountPath;
+  final String? inputJsonPath;
   final String? appId;
   final String? campaignId;
   final String outDir;
@@ -584,6 +957,7 @@ class _ParsedArgs {
 _ParsedArgs _parseArgs(List<String> args) {
   String? projectId;
   String? serviceAccountPath;
+  String? inputJsonPath;
   String? appId;
   String? campaignId;
   var outDir = 'exports';
@@ -601,6 +975,9 @@ _ParsedArgs _parseArgs(List<String> args) {
         break;
       case '--service-account':
         serviceAccountPath = _nextValue(args, ++i, '--service-account');
+        break;
+      case '--input-json':
+        inputJsonPath = _nextValue(args, ++i, '--input-json');
         break;
       case '--app-id':
         appId = _nextValue(args, ++i, '--app-id');
@@ -622,6 +999,7 @@ _ParsedArgs _parseArgs(List<String> args) {
     showHelp: showHelp,
     projectId: projectId,
     serviceAccountPath: serviceAccountPath,
+    inputJsonPath: inputJsonPath,
     appId: appId,
     campaignId: campaignId,
     outDir: outDir,
@@ -641,11 +1019,16 @@ Export beta reports from Firestore to local files.
 
 Usage:
   dart run tools/export_beta_reports.dart
-    --service-account /path/service-account.json
-    --project-id your-firebase-project
+    [--input-json /path/beta_reports.json]
+    [--service-account /path/service-account.json]
+    [--project-id your-firebase-project]
     [--app-id demo_app]
     [--campaign-id demo_beta_1]
     [--out-dir exports]
+
+Notes:
+  - If --input-json is provided, the export runs offline and does not connect to Firestore.
+  - If --input-json is not provided, Firestore mode is used (requires credentials/project id).
 
 Outputs:
   - beta_reports.json
