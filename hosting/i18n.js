@@ -1839,7 +1839,7 @@
 
   async function loadDemoReport() {
     try {
-      const response = await fetch('demo/beta_reports.json', { cache: 'no-store' });
+      const response = await fetch('demo/beta_reports.json');
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }

@@ -174,31 +174,6 @@ body {
   gap: 1rem;
 }
 
-.hero__controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.top-link {
-  display: inline-flex;
-  align-items: center;
-  margin: 0 0 1rem;
-  padding: 0.26rem 0.6rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(214, 226, 234, 0.32);
-  color: #ffffff;
-  background: rgba(8, 39, 61, 0.45);
-  font-size: 0.84rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.top-link:hover {
-  border-color: rgba(249, 115, 22, 0.45);
-  color: #fff0e4;
-}
-
 .badge {
   display: inline-block;
   margin: 0 0 1rem;
@@ -358,7 +333,6 @@ h1 {
 .btn:focus-visible,
 .doc-card__button:focus-visible,
 .language-switch__button:focus-visible,
-.top-link:focus-visible,
 .guide-link:focus-visible {
   outline: 2px solid rgba(249, 115, 22, 0.75);
   outline-offset: 2px;
@@ -1392,16 +1366,7 @@ code {
     gap: 0.55rem;
   }
 
-  .hero__controls {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
   .language-switch {
-    margin-bottom: 0.4rem;
-  }
-
-  .top-link {
     margin-bottom: 0.4rem;
   }
 
