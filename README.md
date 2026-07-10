@@ -135,9 +135,17 @@ Errores comunes durante integracion:
 - Fallo de persistencia local: `saveDraft` puede lanzar `StateError`.
 - Payload local invalido: `getDraft` puede lanzar `FormatException`.
 
+## Analysis transparency
+
+- El Analysis Engine usa reglas deterministas y explicables.
+- Los mismos datos de entrada producen el mismo resultado.
+- Las penalizaciones y fortalezas quedan visibles en el reporte generado.
+- No se usa machine learning para calcular el `Beta Confidence Score` ni la `Release Decision`.
+- Las reglas podran versionarse en futuras versiones para mantener trazabilidad.
+
 ## Licencia
 
-El archivo `LICENSE` del repositorio esta como placeholder (`TODO: Add your license here.`).
+License: MIT.
 
 ## Exportacion local de reportes
 

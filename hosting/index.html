@@ -9,16 +9,17 @@
     <meta name="author" content="BetaTest Flow">
     <meta name="theme-color" content="#0F3D5E">
     <meta name="color-scheme" content="dark light">
-    <link rel="canonical" href="https://YOUR_DOMAIN/">
-    <link rel="alternate" hreflang="en" href="https://YOUR_DOMAIN/">
-    <link rel="alternate" hreflang="es" href="https://YOUR_DOMAIN/?lang=es">
+    <link rel="canonical" href="https://betatest-flow.web.app/">
+    <link rel="alternate" hreflang="en" href="https://betatest-flow.web.app/">
+    <link rel="alternate" hreflang="es" href="https://betatest-flow.web.app/?lang=es">
 
     <meta property="og:title" content="BetaTest Flow">
     <meta property="og:description" content="Flutter Beta Testing SDK">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
+    <!-- TODO: Replace with final social preview image before public launch. -->
     <meta property="og:image" content="/images/social-preview.png">
-    <meta property="og:url" content="https://YOUR_DOMAIN/">
+    <meta property="og:url" content="https://betatest-flow.web.app/">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="BetaTest Flow">
@@ -55,7 +56,7 @@
           <a class="top-nav__link" href="#documentation" data-i18n="nav.documentation">Documentation</a>
           <a class="top-nav__link" href="#executive-report" data-i18n="nav.demo">Demo</a>
           <a class="top-nav__link" href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
-          <a class="top-nav__link" href="https://github.com" target="_blank" rel="noreferrer" data-i18n="nav.github">GitHub</a>
+          <a class="top-nav__link" href="https://github.com/camiaaplicacion-collab/betatest-flow" target="_blank" rel="noreferrer" data-i18n="nav.github">GitHub</a>
         </nav>
 
         <div class="top-nav__actions">
@@ -215,11 +216,17 @@ flutter pub get</code></pre>
             <span class="integration-step__number">3</span>
             <div class="integration-step__content">
               <h3 data-i18n="integrationGuide.step3.title">Create the config</h3>
-              <p data-i18n="integrationGuide.step3.description">Define app, campaign and user context for report attribution.</p>
+              <p data-i18n="integrationGuide.step3.description">Define app and campaign metadata, checklist items, and report version.</p>
               <pre><code data-integration-code>final config = BetaTestFlowConfig(
   appId: 'my_flutter_app',
+  appName: 'My Flutter App',
   campaignId: 'closed_beta_1',
-  userId: currentUserId,
+  campaignName: 'Closed Beta 1',
+  reportVersion: '1',
+  checklistItems: const [
+    BetaChecklistItem(id: 'login', title: 'Login works'),
+    BetaChecklistItem(id: 'home', title: 'Home loads'),
+  ],
 );</code></pre>
               <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
               <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step3.expected">Configuration object is ready to be injected into UI components.</span></p>
@@ -230,9 +237,11 @@ flutter pub get</code></pre>
             <span class="integration-step__number">4</span>
             <div class="integration-step__content">
               <h3 data-i18n="integrationGuide.step4.title">Add the feedback button</h3>
-              <p data-i18n="integrationGuide.step4.description">Render the SDK button so testers can submit structured feedback.</p>
+              <p data-i18n="integrationGuide.step4.description">Create the repository and render the SDK button so testers can submit structured feedback.</p>
               <pre><code data-integration-code>BetaFeedbackButton(
   config: config,
+  repository: FirebaseBetaFeedbackRepository(config: config),
+  userId: currentUserId,
 )</code></pre>
               <button class="btn btn--ghost integration-step__copy" type="button" data-copy-integration-code data-i18n="integrationGuide.copyButton">Copy code</button>
               <p class="integration-step__expected"><strong data-i18n="integrationGuide.expectedLabel">Expected:</strong> <span data-i18n="integrationGuide.step4.expected">Feedback entry point is visible in your app UI.</span></p>
@@ -397,6 +406,10 @@ flutter pub get</code></pre>
   campaignId: 'beta_1',
   campaignName: 'Beta 1',
   reportVersion: '1',
+  checklistItems: const [
+    BetaChecklistItem(id: 'login', title: 'Login'),
+    BetaChecklistItem(id: 'home', title: 'Home'),
+  ],
 );
 
 BetaFeedbackButton(
@@ -481,6 +494,7 @@ BetaFeedbackButton(
 
         <div class="gs-block">
           <p data-i18n="analysisEngineGuide.intro">The engine automatically analyzes every beta report and generates actionable guidance for the development team.</p>
+          <p data-i18n="analysisEngineGuide.transparencyNote">BetaTest Flow uses deterministic and explainable rules to calculate release decisions and confidence scores. It does not use machine learning for these calculations.</p>
         </div>
 
         <div class="ae-grid">
@@ -998,7 +1012,7 @@ Expected response format:
         <p data-i18n="cta.body">Start with minimal setup and evolve into evidence-based release decisions.</p>
         <div class="cta-actions">
           <a class="btn btn--primary btn--demo" href="#executive-report" data-i18n="cta.tryDemo">Try the Demo</a>
-          <a class="btn btn--primary" href="https://github.com" target="_blank" rel="noreferrer" data-i18n="cta.button">View on GitHub</a>
+          <a class="btn btn--primary" href="https://github.com/camiaaplicacion-collab/betatest-flow" target="_blank" rel="noreferrer" data-i18n="cta.button">View on GitHub</a>
           <button class="btn btn--ghost share-btn" type="button" data-share-trigger data-i18n="share.cta">Share BetaTest Flow</button>
         </div>
       </section>

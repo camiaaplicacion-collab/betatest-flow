@@ -1,7 +1,9 @@
 name: betatest_flow
 description: "Reusable Flutter SDK (MVP) for beta feedback collection with Firebase-ready models and contracts."
 version: 0.0.3-beta
-homepage:
+homepage: https://betatest-flow.web.app
+repository: https://github.com/camiaaplicacion-collab/betatest-flow
+issue_tracker: https://github.com/camiaaplicacion-collab/betatest-flow/issues
 
 environment:
   sdk: ^3.11.5

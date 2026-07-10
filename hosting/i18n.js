@@ -119,14 +119,14 @@
         step3: {
           title: 'Create the config',
           description:
-            'Define app, campaign and user context for report attribution.',
+            'Define app and campaign metadata, checklist items, and report version.',
           expected:
             'Configuration object is ready to be injected into UI components.',
         },
         step4: {
           title: 'Add the feedback button',
           description:
-            'Render the SDK button so testers can submit structured feedback.',
+            'Create the repository and render the SDK button so testers can submit structured feedback.',
           expected: 'Feedback entry point is visible in your app UI.',
         },
         step5: {
@@ -278,6 +278,8 @@
         levelValue: 'Intermediate',
         intro:
           'The engine automatically analyzes every beta report and generates actionable guidance for the development team.',
+        transparencyNote:
+          'BetaTest Flow uses deterministic and explainable rules to calculate release decisions and confidence scores. It does not use machine learning for these calculations.',
         decisionTitle: 'Release Decision',
         decisionBody: 'Automatically classifies release state as:',
         scoreTitle: 'Beta Confidence Score',
@@ -717,14 +719,14 @@
         step3: {
           title: 'Crear la configuracion',
           description:
-            'Define app, campana y usuario para atribuir correctamente los reportes.',
+            'Define metadatos de app y campana, checklistItems y reportVersion.',
           expected:
             'El objeto de configuracion queda listo para inyectarse en UI.',
         },
         step4: {
           title: 'Agregar el boton de feedback',
           description:
-            'Renderiza el boton del SDK para que testers envien feedback estructurado.',
+            'Crea el repository y renderiza el boton del SDK para que testers envien feedback estructurado.',
           expected: 'El punto de entrada de feedback ya es visible en la app.',
         },
         step5: {
@@ -876,6 +878,8 @@
         levelValue: 'Intermediate',
         intro:
           'El motor analiza automaticamente todos los reportes beta y genera informacion accionable para el equipo de desarrollo.',
+        transparencyNote:
+          'BetaTest Flow utiliza reglas deterministas y explicables para calcular decisiones de publicacion y puntajes de confianza. No utiliza aprendizaje automatico para estos calculos.',
         decisionTitle: 'Release Decision',
         decisionBody: 'Clasifica automaticamente el estado de release como:',
         scoreTitle: 'Beta Confidence Score',
